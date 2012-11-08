@@ -2,13 +2,20 @@
 <html>
 <head>
   <title>The Walk30 Experiment | <%= yield(:title) %></title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag    "application", media: "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->  
 </head>
 <body>
 
-<%= yield %>
+<div class="container-narrow">
+	<%= render 'layouts/header' %>	
+	<hr>	
+  	<%= yield %>
+</div>
 
 </body>
 </html>

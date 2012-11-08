@@ -8,7 +8,7 @@ describe "Static pages" do
 
     before { visit root_path }
 
-    it { should have_selector('h1',    text: 'The Walk30 Experiment') }
-    it { should have_selector 'title', text: '| Home' }
+    it { should have_selector('h1',    text: 'Welcome to the Walk30 Experiment') }
+    it { should have_selector 'title', text: '| Welcome' }
   end
 end

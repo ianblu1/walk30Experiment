@@ -1,6 +1,9 @@
 Walk30Experiment::Application.routes.draw do
+  
   #get "static_pages/home"
   root to: 'static_pages#home'
+  match '/contact', to: 'static_pages#contact'
+  match '/signup', to: "participants#new"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

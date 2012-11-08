@@ -1,3 +1,21 @@
--provide(:title, 'Home')
-%h1 The Walk30 Experiment
-%p Welcome to the Walk30 Experiment!
+-provide(:title, 'Welcome')
+.jumbotron.hero-unit
+	%h1 Welcome to the Walk30 Experiment!
+	= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary"
+	
+%hr
+
+.row-fluid.marketing
+	.span6
+		%h4 What?
+		%p Copy around the experiment itself
+		
+		%h4 Why?
+		%p Copy around the benefits of moderate exercise
+		
+	.span6
+		%h4 How?
+		%p Copy around what we need the participants to do
+		
+		%h4 When?
+		%p Copy around enrollment, duration, results. Contact us if you want to know more.
