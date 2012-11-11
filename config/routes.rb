@@ -1,5 +1,7 @@
 Walk30Experiment::Application.routes.draw do
   
+  resources :participants, only: [:new, :create, :destroy]
+  
   #get "static_pages/home"
   root to: 'static_pages#home'
   match '/contact', to: 'static_pages#contact'
