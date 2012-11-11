@@ -13,6 +13,9 @@
 
 <div class="container-narrow">
 	<%= render 'layouts/header' %>	
+	<div id="flash_alerts">
+      <%= render 'shared/flashes' %>
+    </div>
 	<hr>	
   	<%= yield %>
 </div>
