@@ -8,6 +8,7 @@ gem 'devise'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
+gem "recaptcha", :require => "recaptcha/rails"
 
 group :development, :test do
   gem 'rspec-rails', '2.11.0'

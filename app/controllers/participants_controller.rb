@@ -7,10 +7,15 @@ class ParticipantsController < ApplicationController
   
   def create
     @participant = Participant.new(params[:participant])
-    if @participant.save
-      flash[:success] = "Welcome to Walk30!"
-      redirect_to root_path
+    if verify_recaptcha
+      if @participant.save
+        flash[:success] = "Welcome to Walk30!"
+        redirect_to root_path
+      else
+        render 'new'
+      end
     else
+      flash[:error] = "Something wrong with the captcha info."
       render 'new'
     end
   end  
