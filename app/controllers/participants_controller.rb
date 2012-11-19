@@ -1,4 +1,6 @@
 class ParticipantsController < ApplicationController
+  before_filter :authenticate_user!, only: [:index, :show]
+  
   def new
     @participant=Participant.new
   end
@@ -11,6 +13,14 @@ class ParticipantsController < ApplicationController
     else
       render 'new'
     end
+  end  
+  
+  def index
+    @participants = Participant.paginate(page: params[:page])
+  end
+  
+  def show
+    @participant = Participant.find(params[:id])
   end  
   
 end

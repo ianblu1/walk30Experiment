@@ -4,6 +4,10 @@ gem 'rails', '3.2.6'
 gem 'haml'
 gem 'bootstrap-sass'
 gem 'pg'
+gem 'devise'
+gem 'faker'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 
 group :development, :test do
   gem 'rspec-rails', '2.11.0'

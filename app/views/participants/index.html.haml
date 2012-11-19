@@ -1,0 +1,10 @@
+-provide(:title, 'All Participants')
+%h1 All Participants
+
+=will_paginate
+
+%ul{class: "participants"}
+  = render @participants
+
+
+= will_paginate

@@ -1,6 +1,11 @@
 Walk30Experiment::Application.routes.draw do
   
-  resources :participants, only: [:new, :create, :destroy]
+  devise_for :users
+  devise_scope :user do
+    match "/login", to: "devise/sessions#new"
+  end
+  
+  resources :participants
   
   #get "static_pages/home"
   root to: 'static_pages#home'
