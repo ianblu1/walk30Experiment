@@ -24,6 +24,7 @@ class Participant < ActiveRecord::Base
   VALID_PHONE_REGEX = /^[\(\)0-9\- \+\.]{10,20}$/ 
   validates :phone, presence: true,
                     format: { with: VALID_PHONE_REGEX, message: "must be a valid phone number"}
-                    
+  
+  default_scope order: 'participants.created_at DESC'                 
   
 end
