@@ -54,6 +54,8 @@ class Participant < ActiveRecord::Base
   validates :phone, presence: true,
                     format: { with: VALID_PHONE_REGEX, message: "must be a valid phone number"}
   
+  default_scope order: 'participants.created_at DESC'   
+                   
   protected
   def self.formatPhone(phone)
     return phone.gsub(/\D/, '')

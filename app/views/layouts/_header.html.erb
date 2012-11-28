@@ -3,6 +3,7 @@
 			<li><%= link_to "Home", root_path %></li>
         	<li><%= link_to "Contact", contact_path %></li>
         	<% if user_signed_in? %>
+        		<li><%= link_to "Participants", participants_path %></li>
         		<li><%= link_to "Settings", edit_user_registration_path %></li>
                 <li class="divider"></li>
                 <li>
