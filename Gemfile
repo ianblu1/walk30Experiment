@@ -9,6 +9,7 @@ gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem "recaptcha", :require => "recaptcha/rails"
+gem 'cancan'
 
 group :development, :test do
   gem 'rspec-rails', '2.11.0'
