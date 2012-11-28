@@ -11,16 +11,35 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+
 ActiveRecord::Schema.define(:version => 20121128230315) do
+
+
+  create_table "messages", :force => true do |t|
+    t.integer  "participant_id"
+    t.string   "subject"
+    t.string   "content"
+    t.integer  "medium"
+    t.integer  "status"
+    t.datetime "scheduled_at"
+    t.datetime "sent_at"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "messages", ["participant_id", "sent_at", "scheduled_at"], :name => "index_messages_on_participant_id_and_sent_at_and_scheduled_at"
 
   create_table "participants", :force => true do |t|
     t.string   "email"
     t.integer  "age"
     t.string   "zip_code"
     t.boolean  "is_male"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
     t.string   "phone"
+    t.integer  "status"
+    t.datetime "experiment_begun_at"
+    t.datetime "experiment_ended_at"
   end
 
   add_index "participants", ["email"], :name => "index_participants_on_email", :unique => true

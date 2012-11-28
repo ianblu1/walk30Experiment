@@ -3,15 +3,18 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.6'
 gem 'haml'
 gem 'bootstrap-sass'
-gem 'pg'
 gem 'devise'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem "recaptcha", :require => "recaptcha/rails"
 gem 'cancan'
+gem 'twilio-ruby'
+gem 'pg'
+
 
 group :development, :test do
+  gem 'factory_girl_rails', '4.1.0'
   gem 'rspec-rails', '2.11.0'
 end
 

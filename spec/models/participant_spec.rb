@@ -2,14 +2,17 @@
 #
 # Table name: participants
 #
-#  id         :integer          not null, primary key
-#  email      :string(255)
-#  age        :integer
-#  zip_code   :string(255)
-#  is_male    :boolean
-#  phone      :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                  :integer          not null, primary key
+#  email               :string(255)
+#  age                 :integer
+#  zip_code            :string(255)
+#  is_male             :boolean
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  phone               :string(255)
+#  status              :integer
+#  experiment_begun_at :datetime
+#  experiment_ended_at :datetime
 #
 
 require 'spec_helper'
