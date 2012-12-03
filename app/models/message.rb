@@ -35,43 +35,99 @@ class Message < ActiveRecord::Base
 
   validates :content, presence: true
   
-  validates :content, length: { maximum: 140 }, :if => :isTextMessage?
-  validates :subject, length: { maximum: 0 }, :if => :isTextMessage?
+  validates :content, length: { maximum: 140 }, :if => :textMessage?
+  validates :subject, length: { maximum: 0 }, :if => :textMessage?
 
-  validates :subject, length: { maximum: 140 }, :if => :isEmail?
+  validates :subject, length: { maximum: 140 }, :if => :email?
   
-  def self.sendAllPendingScheduledBeforeNow()
+  def self.deliverAllPendingScheduledBeforeNow()
     i = 0
     for message in Message.find_all_by_status(PENDING)
       if message.scheduled_at.past?
-        message.sendMessage
+        message.deliverMessage
         i = i+1
       end
     end
     return i
   end
   
-  def isTextMessage? 
+  def textMessage? 
     medium==TEXT
   end
 
-  def isEmail? 
+  def email? 
     medium==EMAIL
   end
   
-  def isTest?
+  def test?
     medium==TEST
   end
   
-  def sendMessage()
-    sent = FALSE
+  def delivered?
+    status==DELIVERED
+  end
+  
+  def received?
+    status==RECEIVED
+  end
+  
+  def pending?
+    status==PENDING
+  end
+  
+  def failed?
+    status==FAILED
+  end
+  
+  def mediumString
+    if self.textMessage?
+      return "TEXT"
+    elsif self.email?
+      return "EMAIL"
+    elsif self.test?
+      return "TEST"
+    end
+  end
+  
+  def statusString
+    if self.pending?
+      return "PENDING"
+    elsif self.received?
+      return "RECEIVED"
+    elsif self.delivered?
+      return "DELIVERED"
+    elsif self.failed?
+      return "FAILED"
+    end
+  end
+  
+  def summaryString
+    if self.textMessage?
+      return self.content
+    elsif self.test?
+      return self.content
+    elsif self.email?
+      return self.subject
+    end
+  end
+  
+  def timeString
+    if self.pending?
+      return self.scheduled_at
+    else
+      return self.sent_at
+    end
+  end 
+  
+  def deliverMessage()
+    delivered = FALSE
     if self.status == PENDING
       if medium == TEXT
-        sent = self.sendTwilioMessage
+        delivered = self.deliverTwilioMessage
       elsif medium == EMAIL
-        sent = self.sendEmailMessage
+        delivered = self.deliverEmailMessage
       elsif medium == TEST
-        sent = self.sendTestMessage
+        delivered = self.deliverTestMessage
       end
       self.sent_at = DateTime.now
       self.save
@@ -82,20 +138,20 @@ class Message < ActiveRecord::Base
     elsif self.status == FAILED
       puts "Cannot deliver message. Message failed on previous delivery."
     end
-    return sent
+    return delivered
   end
 
   
   protected
   
-  def sendTestMessage()
+  def deliverTestMessage()
     self.status = DELIVERED
     self.sent_at = DateTime.now()
     puts 'TEST message with content: "' + self.content + '" delivered.'
     return true
   end
   
-  def sendTwilioMessage()
+  def deliverTwilioMessage()
     from = '+14156973206'
     to = '+1' + self.participant.phone
     body = self.content
@@ -118,7 +174,7 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def sendEmailMessage
+  def deliverEmailMessage
     self.status = FAILED
     self.save
     puts "Email not yet enabled"

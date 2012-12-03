@@ -26,6 +26,7 @@ class ParticipantsController < ApplicationController
   
   def show
     @participant = Participant.find(params[:id])
+    @messages = @participant.messages(page: params[:page])
   end  
   
 end

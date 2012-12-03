@@ -19,16 +19,106 @@ class Participant < ActiveRecord::Base
   attr_accessible :age, :email, :is_male, :phone, :zip_code, :status
   has_many :messages  
   
+  #Status values
+  ACTIVE = 1
+  TERMINATED = 2
+  
+  def activate
+    if self.pending?
+      self.status = ACTIVE
+      self.experiment_begun_at = DateTime.now()
+    end
+  end
+  
+  def terminate
+    self.status = TERMINATED
+    self.experiment_ended_at = DateTime.now()
+  end
+  
+  def pending?
+    self.status==nil
+  end
+  
+  def active? 
+    self.status==ACTIVE
+  end
+
+  def terminated? 
+    self.status==ACTIVE
+  end
+  
+  def days_active
+    if self.experiment_begun_at
+      if self.experiment_ended_at
+        return (self.experiment_ended_at.to_f - self.experiment_begun_at.to_f)/86400.0
+      else
+        return (DateTime.now.to_f - self.experiment_begun_at.to_f)/86400.0
+      end
+    end
+    return nil
+  end
+  
+  def days_since_terminated
+    if self.experiment_ended_at
+      return (DateTime.now.to_f - self.experiment_ended_at.to_f)/86400.0
+    end
+    return nil
+  end
+
+  def days_pending
+    if self.experiment_begun_at
+      return (self.days_pending - self.created_at.to_f)/86400.0
+    elsif self.experiment_ended_at
+      return (self.experiment_ended_at - self.created_at.to_f)/86400.0
+    else
+      return (DateTime.now.to_f - self.created_at.to_f)/86400.0
+    end
+  end
+  
+  def statusString
+    if self.active?
+      return "ACTIVE"
+    elsif self.terminated?
+      return "TERMINATED"
+      self.days_active.round.to_s
+    elsif self.pending?
+      return "PENDING"
+    end
+  end
+  
+  def daysInStatus
+    if self.active?
+      return self.days_active
+    elsif self.terminated?
+      return self.days_terminated
+      self.days_active.round.to_s
+    elsif self.pending?
+      return self.days_pending
+    end
+  end
+  
+  def deliveredMessages
+    return self.messages.where('status = ?',Message::DELIVERED)
+  end
+
+  def receivedMessages
+    return self.messages.where('status = ?',Message::RECEIVED)
+  end
+
+  def pendingMessages
+    return self.messages.where('status = ?',Message::PENDING)
+  end
+  
   def testMessageWithDelayInMinutes(content,delay)
     time = DateTime.now() + delay/24/60
     pendingMessageWithTime(content,Message::TEST,time)
     return 
   end
         
-  def sendMessage(content,medium)
+  def deliverMessage(content,medium)
     message = self.messages.build(content:content,medium:medium,status:Message::PENDING,scheduled_at:DateTime.now)
     message.save
-    return message.send()
+    return message.deliver()
   end
   
   def pendingMessageWithTime(content,medium,dateTime)

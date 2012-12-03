@@ -3,8 +3,19 @@
 
 =will_paginate
 
-%ul{class: "participants"}
-  = render @participants
+
+%table{:cellspacing => "5"}
+    %thead
+        %th ID
+        %th STATUS
+        %th Days in STATUS
+        %th EMAIL
+        %th PHONE
+        %th Messages Delivered
+        %th Messages Received
+        %th Messages Pending
+		
+    %tbody
+        = render @participants
 
 
-= will_paginate

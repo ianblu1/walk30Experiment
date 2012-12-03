@@ -1,1 +1,10 @@
-%li= link_to participant.email, participant
+%tr
+  %td= link_to participant.id, participant	
+  %td= participant.statusString
+  %td= participant.daysInStatus.round(1).to_s
+  %td= participant.email
+  %td= participant.phone
+  %td= participant.deliveredMessages.length
+  %td= participant.receivedMessages.length
+  %td= participant.pendingMessages.length
+

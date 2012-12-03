@@ -1,2 +1,13 @@
 -provide(:title, @participant.id)
 %h2=@participant.email
+%table{:cellspacing => "5"}
+	%thead
+		%th ID
+		%th MEDIUM
+		%th STATUS
+		%th DATE
+		%th TIME
+		%th SUMMARY
+
+	%tbody
+		= render @messages
