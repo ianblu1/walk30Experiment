@@ -16,24 +16,25 @@
 #
 
 class Participant < ActiveRecord::Base
-  attr_accessible :age, :email, :is_male, :phone, :zip_code
-  has_many :messages
+  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status
+  has_many :messages  
   
-  def createTextMessageWithDelayAndTimestamp(content,delayInHours)
-    time = DateTime.now + delayInHours/24.0
-    content = content + " " + time.strftime('%F %T')
-    createPendingMessageWithTime(content,Message::TEXT,time)
+  def testMessageWithDelayInMinutes(content,delay)
+    time = DateTime.now() + delay/24/60
+    pendingMessageWithTime(content,Message::TEST,time)
+    return 
   end
-      
-  def createAndDeliverMessage(content,medium)
+        
+  def sendMessage(content,medium)
     message = self.messages.build(content:content,medium:medium,status:Message::PENDING,scheduled_at:DateTime.now)
     message.save
-    return message.deliver()
+    return message.send()
   end
   
-  def createPendingMessageWithTime(content,medium,dateTime)
+  def pendingMessageWithTime(content,medium,dateTime)
     message = self.messages.build(content:content,medium:medium,status:Message::PENDING,scheduled_at:dateTime)
     message.save
+    return message
   end
   
   def self.participantWithEmail(email)

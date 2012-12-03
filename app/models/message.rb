@@ -21,6 +21,7 @@ class Message < ActiveRecord::Base
   #message mediums
   TEXT = 0
   EMAIL = 1
+  TEST = 2
   
   #message status codes
   PENDING = 0
@@ -39,6 +40,17 @@ class Message < ActiveRecord::Base
 
   validates :subject, length: { maximum: 140 }, :if => :isEmail?
   
+  def self.sendAllPendingScheduledBeforeNow()
+    i = 0
+    for message in Message.find_all_by_status(PENDING)
+      if message.scheduled_at.past?
+        message.sendMessage
+        i = i+1
+      end
+    end
+    return i
+  end
+  
   def isTextMessage? 
     medium==TEXT
   end
@@ -47,13 +59,22 @@ class Message < ActiveRecord::Base
     medium==EMAIL
   end
   
-  def deliver()
+  def isTest?
+    medium==TEST
+  end
+  
+  def sendMessage()
+    sent = FALSE
     if self.status == PENDING
       if medium == TEXT
-        return self.deliverUsingTwilio
-      else
-        return self.deliverUsingMailer
+        sent = self.sendTwilioMessage
+      elsif medium == EMAIL
+        sent = self.sendEmailMessage
+      elsif medium == TEST
+        sent = self.sendTestMessage
       end
+      self.sent_at = DateTime.now
+      self.save
     elsif self.status == DELIVERED
       puts "Cannot deliver message. Message has already been delivered."
     elsif self.status == RECEIVED
@@ -61,11 +82,20 @@ class Message < ActiveRecord::Base
     elsif self.status == FAILED
       puts "Cannot deliver message. Message failed on previous delivery."
     end
-    return false
+    return sent
   end
+
   
   protected
-  def deliverUsingTwilio()
+  
+  def sendTestMessage()
+    self.status = DELIVERED
+    self.sent_at = DateTime.now()
+    puts 'TEST message with content: "' + self.content + '" delivered.'
+    return true
+  end
+  
+  def sendTwilioMessage()
     from = '+14156973206'
     to = '+1' + self.participant.phone
     body = self.content
@@ -88,7 +118,7 @@ class Message < ActiveRecord::Base
     end
   end
 
-  def deliverUsingMailer
+  def sendEmailMessage
     self.status = FAILED
     self.save
     puts "Email not yet enabled"

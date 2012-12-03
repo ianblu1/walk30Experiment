@@ -11,6 +11,7 @@ gem "recaptcha", :require => "recaptcha/rails"
 gem 'cancan'
 gem 'twilio-ruby'
 gem 'pg'
+gem 'cancan'
 
 
 group :development, :test do
