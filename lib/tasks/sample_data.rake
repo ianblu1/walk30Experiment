@@ -2,12 +2,11 @@ namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
     make_participants
-    make_users  
     make_amory_participant
     make_ian_participant
   end
   task seed: :environment do
-    make_admins
+    make_users
   end  
   
 end
@@ -42,18 +41,6 @@ def make_amory_participant
 end
 
 def make_users
-	admin1=User.create!(email:    "ianblu1@gmail.com",
-                 password: "foobar",
-                 password_confirmation: "foobar")
-    admin1.toggle!(:admin)
-    admin2=User.create!(email:    "amory.schlender@gmail.com",
-                 password: "foobar",
-                 password_confirmation: "foobar")
-	admin2.toggle!(:admin)
-
-end
-
-def make_admins
 	admin1=User.create!(email:    "ianblu1@gmail.com",
                  password: "foobar",
                  password_confirmation: "foobar")
