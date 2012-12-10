@@ -1,5 +1,5 @@
 class ParticipantsController < ApplicationController
-  before_filter :authenticate_user!, only: [:index, :show]
+  before_filter :authenticate_user!, only: [:index, :show, :summary]
   
   def new
     @participant=Participant.new
@@ -10,7 +10,7 @@ class ParticipantsController < ApplicationController
     if verify_recaptcha
       if @participant.save
         flash[:success] = "Welcome to Walk30!"
-        redirect_to root_path
+        redirect_to instructions_path
       else
         render 'new'
       end

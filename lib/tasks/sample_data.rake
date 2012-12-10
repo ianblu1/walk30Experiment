@@ -24,7 +24,7 @@ def make_participants
   end
 end
 
-def make_ian_paricipant
+def make_ian_participant
   Participant.create!(email:    'ianblu1@gmail.com',
                		phone: 	  '6507048903',
                		is_male: true,

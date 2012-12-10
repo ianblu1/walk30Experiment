@@ -19,7 +19,19 @@
 			%p
 			= f.radio_button :is_male, false
 			Female
-			= recaptcha_tags :ssl=>true
 			%p
+			= f.label :walked_last_week, "How many times did you walk for at least 30 minutes in the last week?"
+			= f.number_field :walked_last_week
+			%p
+			= f.label :morning_reminder, "When would you prefer your reminders?"
+			%p
+			= f.radio_button :morning_reminder, true
+			Morning
+			%p
+			= f.radio_button :morning_reminder, false
+			Afternoon
+			%p
+			= recaptcha_tags :ssl=>true
+			%p			
 			%p
 			= f.submit "Enroll Me!", class: "btn btn-large btn-primary"

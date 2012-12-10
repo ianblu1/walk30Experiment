@@ -15,6 +15,7 @@ Walk30Experiment::Application.routes.draw do
   root to: 'static_pages#home'
   match '/contact', to: 'static_pages#contact'
   match '/signup', to: "participants#new"
+  match '/instructions', to: 'static_pages#instructions'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
