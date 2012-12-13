@@ -11,6 +11,15 @@ Walk30Experiment::Application.routes.draw do
     end
     member do
       put :activate
+      put :terminate
+      put :reactivate
+    end
+  end
+
+  resources :participants do
+    member do
+      put :deliver
+      put :reply
     end
   end
   

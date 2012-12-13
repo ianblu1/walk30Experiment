@@ -27,8 +27,20 @@ class Participant < ActiveRecord::Base
     if self.pending?
       self.status = ACTIVE
       self.experiment_begun_at = DateTime.now()
+      self.send_welcome_message(Message::TEST)
       self.save
     end
+  end
+  
+  def send_welcome_message(medium)
+    content = "Welcome to the Walk 30 experiment!"
+    self.deliverMessage(content,medium)
+  end
+
+  def reactivate
+    self.status = ACTIVE
+    self.experiment_ended_at = nil
+    self.save
   end
   
   def terminate
@@ -46,7 +58,7 @@ class Participant < ActiveRecord::Base
   end
 
   def terminated? 
-    self.status==ACTIVE
+    self.status==TERMINATED
   end
   
   def days_active
@@ -57,10 +69,9 @@ class Participant < ActiveRecord::Base
         return (DateTime.now.to_f - self.experiment_begun_at.to_f)/86400.0
       end
     end
-    return nil
   end
-  
-  def days_since_terminated
+    
+  def days_terminated
     if self.experiment_ended_at
       return (DateTime.now.to_f - self.experiment_ended_at.to_f)/86400.0
     end
@@ -74,6 +85,16 @@ class Participant < ActiveRecord::Base
       return (self.experiment_ended_at - self.created_at.to_f)/86400.0
     else
       return (DateTime.now.to_f - self.created_at.to_f)/86400.0
+    end
+  end
+  
+  def days_in_status
+    if self.pending?
+      return self.days_pending
+    elsif self.active?
+      return self.days_active
+    elsif self.terminated?
+      return self.days_terminated
     end
   end
   

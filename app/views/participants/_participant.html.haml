@@ -1,11 +1,19 @@
 %tr
   %td= link_to participant.id, participant	
   %td= participant.statusString
-  %td= "DAYS"
+  %td= '%.2f' % participant.days_in_status
   %td= participant.email
   %td= participant.phone
   %td= participant.deliveredMessages.length
   %td= participant.receivedMessages.length
   %td= participant.pendingMessages.length
-  %td= link_to "activate", activate_participant_path(participant), :method => :put 
+  - if participant.pending? 
+    %td= link_to "activate", activate_participant_path(participant), :method => :put 
+    %td= link_to "terminate", terminate_participant_path(participant), :method => :put 
+  - elsif participant.active? 
+    %td= ""
+    %td= link_to "terminate", terminate_participant_path(participant), :method => :put 
+  - elsif participant.terminated? 
+    %td= link_to "reactivate", reactivate_participant_path(participant), :method => :put 
+    %td= ""
 

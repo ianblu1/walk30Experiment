@@ -119,7 +119,7 @@ class Message < ActiveRecord::Base
     end
   end 
   
-  def deliverMessage()
+  def deliver()
     delivered = FALSE
     if self.status == PENDING
       if medium == TEXT
