@@ -7,15 +7,11 @@
 %table{:cellspacing => "5"}
     %thead
         %th ID
-        %th STATUS
-        %th Days in STATUS
-        %th EMAIL
-        %th PHONE
-        %th Messages Delivered
-        %th Messages Received
-        %th Messages Pending
+        %th Last Sent Message Time 
+        %th Last Received Message Time 
+        %th Last Received Message Content
 		
     %tbody
-        = render @participants
+        =render :partial => "participant_admin", :collection => @participants, :as => :participant
 
 

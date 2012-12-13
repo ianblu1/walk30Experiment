@@ -27,12 +27,14 @@ class Participant < ActiveRecord::Base
     if self.pending?
       self.status = ACTIVE
       self.experiment_begun_at = DateTime.now()
+      self.save
     end
   end
   
   def terminate
     self.status = TERMINATED
     self.experiment_ended_at = DateTime.now()
+    self.save
   end
   
   def pending?

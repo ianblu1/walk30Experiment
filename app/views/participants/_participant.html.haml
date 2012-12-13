@@ -1,10 +1,11 @@
 %tr
   %td= link_to participant.id, participant	
   %td= participant.statusString
-  %td= participant.daysInStatus.round(1).to_s
+  %td= "DAYS"
   %td= participant.email
   %td= participant.phone
   %td= participant.deliveredMessages.length
   %td= participant.receivedMessages.length
   %td= participant.pendingMessages.length
+  %td= link_to "activate", activate_participant_path(participant), :method => :put 
 

@@ -9,6 +9,9 @@ Walk30Experiment::Application.routes.draw do
     collection do
       get :summary
     end
+    member do
+      put :activate
+    end
   end
   
   #get "static_pages/home"

@@ -20,6 +20,11 @@ class ParticipantsController < ApplicationController
     end
   end  
   
+  def activate
+      Participant.find(params[:id]).activate
+      redirect_to request.referer
+  end
+      
   def index
     @participants = Participant.paginate(page: params[:page])
   end
