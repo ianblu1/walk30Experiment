@@ -16,7 +16,7 @@
 #
 
 class Participant < ActiveRecord::Base
-  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status
+  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week
   has_many :messages  
   
   #Status values

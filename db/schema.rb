@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128230315) do
+ActiveRecord::Schema.define(:version => 20121210013104) do
 
   create_table "messages", :force => true do |t|
     t.integer  "participant_id"
@@ -32,12 +32,14 @@ ActiveRecord::Schema.define(:version => 20121128230315) do
     t.integer  "age"
     t.string   "zip_code"
     t.boolean  "is_male"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.string   "phone"
     t.integer  "status"
     t.datetime "experiment_begun_at"
     t.datetime "experiment_ended_at"
+    t.boolean  "morning_reminder"
+    t.integer  "walked_last_week",    :default => 0
   end
 
   add_index "participants", ["email"], :name => "index_participants_on_email", :unique => true

@@ -2,6 +2,7 @@
 		<ul class="nav nav-pills pull-right">
 			<li><%= link_to "Home", root_path %></li>
         	<li><%= link_to "Contact", contact_path %></li>
+        	<li><%= link_to "Instructions", instructions_path %></li>
         	<% if user_signed_in? %>
         		<li><%= link_to "Participants", participants_path %></li>
         		<li><%= link_to "Summary", summary_participants_path %></li>
