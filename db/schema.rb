@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210013104) do
+ActiveRecord::Schema.define(:version => 20121216222930) do
 
   create_table "messages", :force => true do |t|
     t.integer  "participant_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20121210013104) do
     t.datetime "sent_at"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "flag"
   end
 
   add_index "messages", ["participant_id", "sent_at", "scheduled_at"], :name => "index_messages_on_participant_id_and_sent_at_and_scheduled_at"
@@ -40,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20121210013104) do
     t.datetime "experiment_ended_at"
     t.boolean  "morning_reminder"
     t.integer  "walked_last_week",    :default => 0
+    t.string   "type"
   end
 
   add_index "participants", ["email"], :name => "index_participants_on_email", :unique => true

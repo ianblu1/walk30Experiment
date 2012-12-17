@@ -37,7 +37,7 @@ class ParticipantsController < ApplicationController
   end
       
   def index
-    @participants = Participant.paginate(page: params[:page])
+    @participants = Participant.paginate  :page => params[:page], :per_page => 5, :conditions => ['status = ?', Participant::ACTIVE]
   end
   
   def show

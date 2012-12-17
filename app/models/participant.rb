@@ -20,9 +20,27 @@ class Participant < ActiveRecord::Base
   has_many :messages  
   
   #Status values
+  PENDING = 0
   ACTIVE = 1
   TERMINATED = 2
   
+  
+  before_save {|participant|
+    participant.email=Participant.formatEmail(email)
+    participant.phone=Participant.formatPhone(phone)
+    participant.status ||= 0
+  }
+     
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence:   true,
+                    format:     { with: VALID_EMAIL_REGEX },
+                    uniqueness: { case_sensitive: false }
+  VALID_PHONE_REGEX = /^[\(\)0-9\- \+\.]{10,20}$/ 
+  validates :phone, presence: true,
+                    format: { with: VALID_PHONE_REGEX, message: "must be a valid phone number"}
+  
+  default_scope order: 'participants.created_at DESC'
+    
   def activate
     if self.pending?
       self.status = ACTIVE
@@ -50,15 +68,15 @@ class Participant < ActiveRecord::Base
   end
   
   def pending?
-    self.status==nil
+    self.status%3==PENDING
   end
   
   def active? 
-    self.status==ACTIVE
+    self.status%3==ACTIVE
   end
 
   def terminated? 
-    self.status==TERMINATED
+    self.status%3==TERMINATED
   end
   
   def days_active
@@ -120,16 +138,24 @@ class Participant < ActiveRecord::Base
     end
   end
   
+  def unflaggedMessages
+    return self.messages.select {|message| not message.flagged?}
+  end
+
+  def messagesUnflaggedOrChangedWithinNSeconds(n)
+    return self.messages.select {|message| not message.flagged? or message.secondsSinceLastUpdate < n}    
+  end
+  
   def deliveredMessages
-    return self.messages.where('status = ?',Message::DELIVERED)
+    return self.messages.select {|message| message.delivered?}
   end
 
   def receivedMessages
-    return self.messages.where('status = ?',Message::RECEIVED)
+    return self.messages.select {|message| message.received?}
   end
 
   def pendingMessages
-    return self.messages.where('status = ?',Message::PENDING)
+    return self.messages.select {|message| message.pending?}
   end
   
   def testMessageWithDelayInMinutes(content,delay)
@@ -142,6 +168,15 @@ class Participant < ActiveRecord::Base
     message = self.messages.build(content:content,medium:medium,status:Message::PENDING,scheduled_at:DateTime.now)
     message.save
     return message.deliver()
+  end
+  
+  def messageDelivered(message)
+    puts "Message was delivered succesfully"
+  end
+  
+  def receiveMessage(content,medium)
+    message = self.messages.build(content:content,medium:medium,status:Message::RECEIVED)
+    message.save
   end
   
   def pendingMessageWithTime(content,medium,dateTime)
@@ -157,18 +192,6 @@ class Participant < ActiveRecord::Base
   def self.participantWithPhone(phone)
     return Participant.find_by_phone(Participant.formatPhone(phone))
   end
-        
-  before_save { |participant| [participant.email = Participant.formatEmail(email), participant.phone =Participant.formatPhone(phone)] }
- 
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence:   true,
-                    format:     { with: VALID_EMAIL_REGEX },
-                    uniqueness: { case_sensitive: false }
-  VALID_PHONE_REGEX = /^[\(\)0-9\- \+\.]{10,20}$/ 
-  validates :phone, presence: true,
-                    format: { with: VALID_PHONE_REGEX, message: "must be a valid phone number"}
-  
-  default_scope order: 'participants.created_at DESC'   
                    
   protected
   def self.formatPhone(phone)

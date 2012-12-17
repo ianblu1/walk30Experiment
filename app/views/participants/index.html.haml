@@ -5,13 +5,14 @@
 
 
 %table{:cellspacing => "5"}
-    %thead
-        %th ID
-        %th Last Sent Message Time 
-        %th Last Received Message Time 
-        %th Last Received Message Content
-		
-    %tbody
-        =render :partial => "participant_admin", :collection => @participants, :as => :participant
+	%thead
+		%th ID
+		%th Date
+		%th PST Time
+		%th Messages Sent
+		%th Messages Received
+		%th Flags
+	%tbody
+		=render :partial => "participant_admin", :collection => @participants, :as => :participant
 
 

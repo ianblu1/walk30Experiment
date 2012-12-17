@@ -5,6 +5,8 @@ Walk30Experiment::Application.routes.draw do
     match "/login", to: "devise/sessions#new"
   end
   
+  resources :robot_participants, :controller => "participants", :type => "RobotParticipant"
+  
   resources :participants do
     collection do
       get :summary
@@ -16,10 +18,13 @@ Walk30Experiment::Application.routes.draw do
     end
   end
 
-  resources :participants do
+  resources :messages do
     member do
       put :deliver
       put :reply
+      put :flagPositive
+      put :flagNegative
+      put :flagNeutral
     end
   end
   

@@ -19,15 +19,21 @@ class Message < ActiveRecord::Base
   belongs_to :participant
   
   #message mediums
-  TEXT = 0
-  EMAIL = 1
-  TEST = 2
+  TEST = 0
+  TEXT = 1
+  EMAIL = 2
   
   #message status codes
   PENDING = 0
   DELIVERED = 1
   RECEIVED = 2
   FAILED = 3    
+  
+  #message flags
+  NEUTRAL = 0
+  POSITIVE = 1
+  NEGATIVE = 2
+  
   
   validates :participant_id, presence:true
   validates :medium, presence:true
@@ -39,16 +45,24 @@ class Message < ActiveRecord::Base
   validates :subject, length: { maximum: 0 }, :if => :textMessage?
 
   validates :subject, length: { maximum: 140 }, :if => :email?
+
+  before_create {|message| 
+                message.sent_at = DateTime.now if message.received?
+                }
   
   def self.deliverAllPendingScheduledBeforeNow()
     i = 0
     for message in Message.find_all_by_status(PENDING)
       if message.scheduled_at.past?
-        message.deliverMessage
+        message.deliver
         i = i+1
       end
     end
     return i
+  end
+  
+  def secondsSinceLastUpdate
+    DateTime.now.to_f - self.updated_at.to_f
   end
   
   def textMessage? 
@@ -77,6 +91,37 @@ class Message < ActiveRecord::Base
   
   def failed?
     status==FAILED
+  end
+  
+  def flagged?
+    flag
+  end
+
+  def flagPositive
+    self.flag=POSITIVE
+    self.save
+  end
+  
+  def flagPositive?
+    flag==POSITIVE
+  end
+  
+  def flagNegative
+    self.flag=NEGATIVE
+    self.save
+  end
+  
+  def flagNegative?
+    flag==NEGATIVE
+  end
+  
+  def flagNeutral
+    self.flag=NEUTRAL
+    self.save
+  end
+  
+  def flagNeutral?
+    flag==NEUTRAL
   end
   
   def mediumString
@@ -117,6 +162,7 @@ class Message < ActiveRecord::Base
     else
       return self.sent_at
     end
+    return DateTime.now
   end 
   
   def deliver()
@@ -131,6 +177,7 @@ class Message < ActiveRecord::Base
       end
       self.sent_at = DateTime.now
       self.save
+      self.participant.messageDelivered(self)
     elsif self.status == DELIVERED
       puts "Cannot deliver message. Message has already been delivered."
     elsif self.status == RECEIVED
@@ -140,7 +187,6 @@ class Message < ActiveRecord::Base
     end
     return delivered
   end
-
   
   protected
   

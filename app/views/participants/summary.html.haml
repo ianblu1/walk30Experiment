@@ -16,6 +16,6 @@
         %th Messages Pending
 		
     %tbody
-        = render @participants
+        =render :partial => "participant", :collection => @participants, :as => :participant
 
 

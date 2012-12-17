@@ -7,5 +7,17 @@
   %td= message.summaryString
   -if message.pending?
     %td= link_to "deliver", deliver_message_path(message), :method => :put 
-    
+  -else
+    - if message.flagNegative? 
+      %td= "negative" 
+    -else
+      %td=link_to "negative", flagNegative_message_path(message), :method => :put  
+    - if message.flagNeutral? 
+      %td= "neutral" 
+    -else
+      %td=link_to "neutral", flagNeutral_message_path(message), :method => :put  
+    - if message.flagPositive? 
+      %td= "positive" 
+    -else
+      %td=link_to "positive", flagPositive_message_path(message), :method => :put  
 
