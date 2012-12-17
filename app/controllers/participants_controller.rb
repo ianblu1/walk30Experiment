@@ -30,6 +30,15 @@ class ParticipantsController < ApplicationController
       redirect_to request.referer
   end
 
+  def deliverMessage
+    if params[:delay_in_hours] == ''
+      Participant.find(params[:id]).deliverMessage(params[:content],params[:medium])
+    else
+      time = DateTime.now() + params[:delay_in_hours].to_f/24
+      Participant.find(params[:id]).pendingMessageWithTime(params[:content],params[:medium],time)
+    end
+    redirect_to request.referer
+  end
 
   def terminate
       Participant.find(params[:id]).terminate
@@ -37,12 +46,14 @@ class ParticipantsController < ApplicationController
   end
       
   def index
-    @participants = Participant.paginate  :page => params[:page], :per_page => 5, :conditions => ['status = ?', Participant::ACTIVE]
+    @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
+                                          :conditions => ['status = ?', Participant::ACTIVE]
   end
   
   def show
     @participant = Participant.find(params[:id])
-    @messages = @participant.messages(page: params[:page])
+    @message = @participant.messages.build
+    @messages = @participant.messages(page: params[:page]).sort_by {|message| message.id}
   end
   
   def summary

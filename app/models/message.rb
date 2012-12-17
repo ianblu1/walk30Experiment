@@ -22,7 +22,7 @@ class Message < ActiveRecord::Base
   TEST = 0
   TEXT = 1
   EMAIL = 2
-  
+    
   #message status codes
   PENDING = 0
   DELIVERED = 1

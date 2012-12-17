@@ -31,6 +31,20 @@
 		
 %hr
 
+=form_tag deliverMessage_participant_path, :method => 'post' do
+	Message
+	%p
+	=text_area_tag :content
+	%p
+	Medium:
+	=select_tag :medium, options_for_select([["TEST Message",Message::TEST],["TEXT Message",Message::TEXT]]), :cols=>12
+	%p
+	Delay in hours:
+	=number_field_tag :delay_in_hours, :cols=>12
+	%p
+	=submit_tag "Send Message"
+	
+
 
 %hr
 %table{:cellspacing => "5"}

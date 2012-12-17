@@ -15,13 +15,13 @@ Walk30Experiment::Application.routes.draw do
       put :activate
       put :terminate
       put :reactivate
+      post :deliverMessage
     end
   end
 
   resources :messages do
     member do
       put :deliver
-      put :reply
       put :flagPositive
       put :flagNegative
       put :flagNeutral

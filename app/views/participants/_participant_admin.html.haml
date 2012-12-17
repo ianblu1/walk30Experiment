@@ -1,34 +1,33 @@
--messagesToShow =  participant.messagesUnflaggedOrChangedWithinNSeconds(3600)
--if 1>0
-	%tr
-		%td= link_to participant.id, participant
-		- messagesToShow.each do |message|
-			%tr
-				%td=''
-				%td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
-				%td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
-				-if message.delivered?
-					%td= message.summaryString
-				-else
-					%td= ''
+-messagesToShow =  participant.messagesUnflaggedOrChangedWithinNSeconds(3600).sort_by{|message| message.id}
+%tr
+	%td= link_to participant.id, participant
+	- messagesToShow.each do |message|
+		%tr
+			%td=''
+			%td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
+			%td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
+			-if message.delivered?
+				%td= message.summaryString
+			-else
+				%td= ''
 
-				-if message.received?
-					%td= message.summaryString
-				-else
-					%td= ''
+			-if message.received?
+				%td= message.summaryString
+			-else
+				%td= ''
 
-				-if message.pending?
-					%td= link_to "deliver", deliver_message_path(message), :method => :put 
-				-else
-				- if message.flagNegative? 
-					%td= "negative" 
-				-else
-					%td=link_to "negative", flagNegative_message_path(message), :method => :put  
-				- if message.flagNeutral? 
-					%td= "neutral" 
-				-else
-					%td=link_to "neutral", flagNeutral_message_path(message), :method => :put  
-				- if message.flagPositive? 
-					%td= "positive" 
-				-else
-					%td=link_to "positive", flagPositive_message_path(message), :method => :put  
+			-if message.pending?
+				%td= link_to "deliver", deliver_message_path(message), :method => :put 
+			-else
+			- if message.flagNegative? 
+				%td= "negative" 
+			-else
+				%td=link_to "negative", flagNegative_message_path(message), :method => :put  
+			- if message.flagNeutral? 
+				%td= "neutral" 
+			-else
+				%td=link_to "neutral", flagNeutral_message_path(message), :method => :put  
+			- if message.flagPositive? 
+				%td= "positive" 
+			-else
+				%td=link_to "positive", flagPositive_message_path(message), :method => :put  
