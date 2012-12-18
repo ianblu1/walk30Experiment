@@ -1,37 +1,39 @@
 -provide(:title, 'Sign Up')
-%h1 Fill in to enroll in the Walk30 Experiment
-.row
-	.span6.offset3
-		= form_for @participant do |f|
-			= render 'shared/error_messages', object: f.object
-			= f.label :email
-			= f.text_field :email
-			= f.label :phone, "Phone Number"
-			= f.text_field :phone
-			= f.label :zip_code, "Zip Code"
-			= f.text_field :zip_code
-			= f.label :age
-			= f.number_field :age
-			= f.label :is_male, "Gender"
-			%p
-			= f.radio_button :is_male, true
-			Male
-			%p
-			= f.radio_button :is_male, false
-			Female
-			%p
-			= f.label :walked_last_week, "How many times did you walk for at least 30 minutes in the last week?"
-			= f.number_field :walked_last_week
-			%p
-			= f.label :morning_reminder, "When would you prefer your reminders?"
-			%p
-			= f.radio_button :morning_reminder, true
-			Morning
-			%p
-			= f.radio_button :morning_reminder, false
-			Afternoon
-			%p
-			= recaptcha_tags :ssl=>true
-			%p			
-			%p
-			= f.submit "Enroll Me!", class: "btn btn-large btn-primary"
+.container-narrow
+	.center
+		%h2 Fill in to enroll in the Walk30 Experiment
+	.row
+		.span6.offset3
+			= form_for @participant do |f|
+				= render 'shared/error_messages', object: f.object
+				= f.label :email
+				= f.text_field :email
+				= f.label :phone, "Phone Number"
+				= f.text_field :phone
+				= f.label :zip_code, "Zip Code"
+				= f.text_field :zip_code
+				= f.label :age
+				= f.number_field :age
+				= f.label :is_male, "Gender"
+				%p
+				= f.radio_button :is_male, true
+				Male
+				%p
+				= f.radio_button :is_male, false
+				Female
+				%p
+				= f.label :walked_last_week, "How many times did you walk for at least 30 minutes in the last week?"
+				= f.number_field :walked_last_week
+				%p
+				= f.label :morning_reminder, "When would you prefer your reminders?"
+				%p
+				= f.radio_button :morning_reminder, true
+				Morning
+				%p
+				= f.radio_button :morning_reminder, false
+				Afternoon
+				%p
+				= recaptcha_tags :ssl=>true
+				%p			
+				%p
+				= f.submit "Enroll Me!", class: "btn btn-large btn-primary"

@@ -11,12 +11,16 @@
 </head>
 <body>
 
-<div class="container-narrow">
+<div>
+	<div class="container-narrow">
 	<%= render 'layouts/header' %>	
 	<div id="flash_alerts">
-      <%= render 'shared/flashes' %>
+      
+      	<%= render 'shared/flashes' %>
+      
     </div>
-	<hr>	
+	<hr>
+	</div>	
   	<%= yield %>
 </div>
 

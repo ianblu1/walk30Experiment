@@ -1,15 +1,16 @@
 -provide(:title, @participant.id)
-%h2 
-	=@participant.email 
-	&nbsp; &nbsp;
-	- if @participant.pending? 
-		=link_to "activate", activate_participant_path(@participant), :method => :put 
+.offset3
+	%h2 
+		=@participant.email 
 		&nbsp; &nbsp;
-		=link_to "terminate", terminate_participant_path(@participant), :method => :put 
-	- elsif @participant.active? 
-		=link_to "terminate", terminate_participant_path(@participant), :method => :put 
-	- elsif @participant.terminated? 
-		=link_to "reactivate", reactivate_participant_path(@participant), :method => :put 
+		- if @participant.pending? 
+			=link_to "activate", activate_participant_path(@participant), :method => :put 
+			&nbsp; &nbsp;
+			=link_to "terminate", terminate_participant_path(@participant), :method => :put 
+		- elsif @participant.active? 
+			=link_to "terminate", terminate_participant_path(@participant), :method => :put 
+		- elsif @participant.terminated? 
+			=link_to "reactivate", reactivate_participant_path(@participant), :method => :put 
 
 
 %table{:cellspacing => "5"}
@@ -31,18 +32,19 @@
 		
 %hr
 
-=form_tag deliverMessage_participant_path, :method => 'post' do
-	Message
-	%p
-	=text_area_tag :content
-	%p
-	Medium:
-	=select_tag :medium, options_for_select([["TEST Message",Message::TEST],["TEXT Message",Message::TEXT]]), :cols=>12
-	%p
-	Delay in hours:
-	=number_field_tag :delay_in_hours, :cols=>12
-	%p
-	=submit_tag "Send Message"
+.offset3
+	=form_tag deliverMessage_participant_path, :method => 'post' do
+		Message
+		%p
+		=text_area_tag :content
+		%p
+		Medium:
+		=select_tag :medium, options_for_select([["TEST Message",Message::TEST],["TEXT Message",Message::TEXT]]), :cols=>12
+		%p
+		Delay in hours:
+		=number_field_tag :delay_in_hours, :cols=>12
+		%p
+		=submit_tag "Send Message"
 	
 
 

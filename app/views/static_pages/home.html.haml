@@ -1,43 +1,44 @@
 -provide(:title, 'Welcome')
-.jumbotron.hero-unit
-	%h1 Welcome to the Walk30 Experiment!
-	= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary"
+.container-narrow
+	.jumbotron.hero-unit
+		%h1 Welcome to the Walk30 Experiment!
+		= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary"
+		
+	%hr
 	
-%hr
-
-.row-fluid.marketing
-	.span6
-		%h4 Why?
-		%p	
-			Cardiovascular disease and Diabetes are reaching epidemic proportions, 
-			with cases increasing in number each and every day. That's the bad news. 
-			The good news is that one of the most effective treatments is easy, free, 
-			and fun: moderate exercise. We'd be significantly healthier if we each 
-			walked just 30 minutes a day!
-		
-		%h4 What?
-		%p 
-			We lead busy, action-packed lives. Between responsibilities at home and at
-			the office, to our family and to our friends, it can be hard to remember
-			to take the time out to care for ourselves. Well, that's what the Walk30
-			Experiment is all about. We'll try to find the right strategy for you, to
-			remind you to get out and walk!
-		
-	.span6
-		%h4 How?
-		%p 
-			Well, you would start by signing up. All we need to get you going is a 
-			valid email address and a cellphone number that can receive text messages,
-			as well as your zip code, so we know not text you in the middle of the night.
-			Answering the questions in the sign up form would definitely help us out when
-			we look to understand the results. Respond to the questions we ask, and have
-			fun!
-		
-		%h4 When?
-		%p 
-			We're running right now! Hit the enroll button on this page and fill out 
-			the form. You'll participate for 30 days after you enroll. 
-			You can quit at any time, just by responding to one of our texts with 
-			"quit".
-			=link_to "Contact us", contact_path 
-			if you want to know more or with an questions or queries.
+	.row-fluid.marketing
+		.span6
+			%h4 Why?
+			%p	
+				Cardiovascular disease and Diabetes are reaching epidemic proportions, 
+				with cases increasing in number each and every day. That's the bad news. 
+				The good news is that one of the most effective treatments is easy, free, 
+				and fun: moderate exercise. We'd be significantly healthier if we each 
+				walked just 30 minutes a day!
+			
+			%h4 What?
+			%p 
+				We lead busy, action-packed lives. Between responsibilities at home and at
+				the office, to our family and to our friends, it can be hard to remember
+				to take the time out to care for ourselves. Well, that's what the Walk30
+				Experiment is all about. We'll try to find the right strategy for you, to
+				remind you to get out and walk!
+			
+		.span6
+			%h4 How?
+			%p 
+				Well, you would start by signing up. All we need to get you going is a 
+				valid email address and a cellphone number that can receive text messages,
+				as well as your zip code, so we know not text you in the middle of the night.
+				Answering the questions in the sign up form would definitely help us out when
+				we look to understand the results. Respond to the questions we ask, and have
+				fun!
+			
+			%h4 When?
+			%p 
+				We're running right now! Hit the enroll button on this page and fill out 
+				the form. You'll participate for 30 days after you enroll. 
+				You can quit at any time, just by responding to one of our texts with 
+				"quit".
+				=link_to "Contact us", contact_path 
+				if you want to know more or with an questions or queries.
