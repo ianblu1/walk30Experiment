@@ -51,7 +51,7 @@ class Participant < ActiveRecord::Base
   end
   
   def send_welcome_message(medium)
-    content = "Welcome to the Walk 30 experiment!"
+    content = "Welcome to the Walk 30 project!"
     self.deliverMessage(content,medium)
   end
 
