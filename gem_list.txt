@@ -1,0 +1,9 @@
+bundler
+json
+localtunnel
+lunchy
+net-ssh
+net-ssh-gateway
+rake
+rubygems-bundler
+rvm

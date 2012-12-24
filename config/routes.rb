@@ -19,6 +19,10 @@ Walk30Experiment::Application.routes.draw do
     end
   end
 
+  post "/twilio/receive/" => "participants#twilio_receive"
+
+
+
   resources :messages do
     member do
       put :deliver
@@ -27,7 +31,7 @@ Walk30Experiment::Application.routes.draw do
       put :flagNeutral
     end
   end
-  
+
   #get "static_pages/home"
   root to: 'static_pages#home'
   match '/contact', to: 'static_pages#contact'

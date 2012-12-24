@@ -48,6 +48,7 @@ class ParticipantsController < ApplicationController
   def index
     @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
+    @Participant = Participant
   end
   
   def show
@@ -60,4 +61,14 @@ class ParticipantsController < ApplicationController
     @participants = Participant.paginate(page: params[:page])
   end  
   
+  def twilio_receive
+    phone = params[:From][2..11]
+    content = params[:Body]
+    participant = Participant.participantWithPhone(phone)
+    if participant
+      participant.receiveMessage(content,Message::TEXT)
+    end
+
+  end
+
 end
