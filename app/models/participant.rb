@@ -65,8 +65,10 @@ class Participant < ActiveRecord::Base
     timeZone=self.time_zone
     nextMessageDateTime=dateOfNextMessage+' '+timeOfNextMessage+' '+timeZone
     dateTime=DateTime.strptime(nextMessageDateTime, '%Y-%m-%d %k:%M %Z')
-    #message = self.messages.build(content:PROJECT_MESSAGE_CONTENT,medium:medium,status:Message::PENDING,scheduled_at:dateTime)
-    return dateTime
+    project_message = self.project_messages.build(content:PROJECT_MESSAGE_CONTENT,medium:medium,status:Message::PENDING,scheduled_at:dateTime)
+    project_message.strategy = strategy
+    project_message.save
+    return project_message
   end
     
   def activate
