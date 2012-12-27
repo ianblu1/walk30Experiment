@@ -16,14 +16,16 @@
 #
 
 class Participant < ActiveRecord::Base
-  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week
-  has_many :messages  
+  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week, :time_zone
+  has_many :messages
+  has_many :project_messages  
   
   #Status values
   PENDING = 0
   ACTIVE = 1
   TERMINATED = 2
   
+  PROJECT_MESSAGE_CONTENT="Walk30! Is now a good time?"
   
   before_save {|participant|
     participant.email=Participant.formatEmail(email)
@@ -38,8 +40,34 @@ class Participant < ActiveRecord::Base
   VALID_PHONE_REGEX = /^[\(\)0-9\- \+\.]{10,20}$/ 
   validates :phone, presence: true,
                     format: { with: VALID_PHONE_REGEX, message: "must be a valid phone number"}
-  
+  validates :time_zone, presence: true,
+                        inclusion: {in: %w(PST EST CST MST AST AKST HAST NST), message: "Sorry, we currently support only North American Time Zones"}
+                      
   default_scope order: 'participants.created_at DESC'
+  
+  def strategyList()
+    return Strategy.where(morning:self.morning_reminder)
+  end
+  
+  def setNextProjectMessage(medium)
+    strategies = strategyList()
+    numMessages=self.project_messages.count
+    lastMessage = self.project_messages.last
+    if numMessages < 1 
+      strategy = strategies[Random.rand(strategies.length)]
+    elsif !lastMessage.flagPositive?
+      strategy = strategies[Random.rand(strategies.length)]
+    else
+      strategy = lastMessage.strategy
+    end
+    dateOfNextMessage = (Date.today.next).strftime
+    timeOfNextMessage = strategy.time
+    timeZone=self.time_zone
+    nextMessageDateTime=dateOfNextMessage+' '+timeOfNextMessage+' '+timeZone
+    dateTime=DateTime.strptime(nextMessageDateTime, '%Y-%m-%d %k:%M %Z')
+    #message = self.messages.build(content:PROJECT_MESSAGE_CONTENT,medium:medium,status:Message::PENDING,scheduled_at:dateTime)
+    return dateTime
+  end
     
   def activate
     if self.pending?

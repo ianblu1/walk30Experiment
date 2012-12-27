@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121216222930) do
+ActiveRecord::Schema.define(:version => 20121227071859) do
+
+  create_table "message_strategies", :force => true do |t|
+    t.integer  "strategy_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "project_message_id"
+  end
 
   create_table "messages", :force => true do |t|
     t.integer  "participant_id"
@@ -24,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20121216222930) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.integer  "flag"
+    t.string   "type"
   end
 
   add_index "messages", ["participant_id", "sent_at", "scheduled_at"], :name => "index_messages_on_participant_id_and_sent_at_and_scheduled_at"
@@ -33,8 +41,8 @@ ActiveRecord::Schema.define(:version => 20121216222930) do
     t.integer  "age"
     t.string   "zip_code"
     t.boolean  "is_male"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.string   "phone"
     t.integer  "status"
     t.datetime "experiment_begun_at"
@@ -42,10 +50,18 @@ ActiveRecord::Schema.define(:version => 20121216222930) do
     t.boolean  "morning_reminder"
     t.integer  "walked_last_week",    :default => 0
     t.string   "type"
+    t.string   "time_zone",           :default => "PST"
   end
 
   add_index "participants", ["email"], :name => "index_participants_on_email", :unique => true
   add_index "participants", ["phone"], :name => "index_participants_on_phone", :unique => true
+
+  create_table "strategies", :force => true do |t|
+    t.boolean  "morning"
+    t.string   "time"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "",    :null => false

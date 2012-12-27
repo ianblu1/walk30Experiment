@@ -31,6 +31,15 @@ Walk30Experiment::Application.routes.draw do
       put :flagNeutral
     end
   end
+  
+  resources :project_messages, :controller => "messages", :type => "ProjectMessage" do
+    member do
+      put :deliver
+      put :flagPositive
+      put :flagNegative
+      put :flagNeutral
+    end
+  end
 
   #get "static_pages/home"
   root to: 'static_pages#home'

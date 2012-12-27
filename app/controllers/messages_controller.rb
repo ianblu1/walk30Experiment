@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
-
+  before_filter :authenticate_user!
+  
   def deliver
     Message.find(params[:id]).deliver
     redirect_to request.referer

@@ -1,5 +1,5 @@
 class ParticipantsController < ApplicationController
-  before_filter :authenticate_user!, only: [:index, :show, :summary]
+  before_filter :authenticate_user!, except: [:new, :create]
   
   def new
     @participant=Participant.new
