@@ -12,8 +12,10 @@ class StaticPagesController < ApplicationController
     phone = params[:From][2..11]
     content = params[:Body]
     participant = Participant.participantWithPhone(phone)
+    @sms = nil
     if participant
       participant.receiveMessage(content,Message::TEXT)
+      #@sms = participant.email
     end
   end
   
