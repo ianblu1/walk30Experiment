@@ -24,6 +24,14 @@ class Participant < ActiveRecord::Base
   PENDING = 0
   ACTIVE = 1
   TERMINATED = 2
+ 
+  #message status codes
+  MESSAGE_PENDING = 0
+   
+  #message mediums
+  TEST = 0
+  TEXT = 1
+  EMAIL = 2
   
   PROJECT_MESSAGE_CONTENT="Walk30! Is now a good time?"
   
@@ -45,8 +53,20 @@ class Participant < ActiveRecord::Base
                       
   default_scope order: 'participants.created_at DESC'
   
+  def self.setUpNextDaysTextMessages()
+    for participant in Participant.find_all_by_status(ACTIVE)
+      if participant.project_messages.find_all_by_status(MESSAGE_PENDING).count<1
+        participant.setNextProjectTextMessage()
+      end
+    end    
+  end
+  
   def strategyList()
     return Strategy.where(morning:self.morning_reminder)
+  end
+  
+  def setNextProjectTextMessage()
+    self.setNextProjectMessage(TEXT)
   end
   
   def setNextProjectMessage(medium)

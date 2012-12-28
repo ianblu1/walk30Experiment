@@ -40,12 +40,18 @@ class ParticipantsController < ApplicationController
     redirect_to request.referer
   end
 
+  def setNextDay    
+    Participant.setUpNextDaysTextMessages()
+    redirect_to request.referer    
+  end
+  
   def terminate
       Participant.find(params[:id]).terminate
       redirect_to request.referer
   end
       
   def index
+    @count_pendingMessages=ProjectMessage.find_all_by_status(0).count
     @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
     @Participant = Participant

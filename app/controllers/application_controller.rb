@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   end 
   
   def after_sign_in_path_for(resource)
-      summary_participants_path
+      participants_path
   end
   
  

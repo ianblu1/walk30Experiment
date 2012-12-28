@@ -1,6 +1,10 @@
 -provide(:title, 'Active Participants')
+.offset6
+	= form_tag setNextDay_participants_path, method: 'put' do
+		=submit_tag "Set Tomorrows' Messages", class: "btn btn-large btn-primary"
+		
+		
 %h1 All Participants
-
 
 =will_paginate
 
