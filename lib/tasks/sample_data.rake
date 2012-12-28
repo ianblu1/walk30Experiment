@@ -7,9 +7,10 @@ namespace :db do
   end
   task seed: :environment do
     make_users
+    make_strategies
   end 
   task defineStrategies: :environment do
-    make_strategies
+    update_strategies
   end 
   
 end
@@ -62,7 +63,16 @@ def make_users
 end
 
 
-def make_strategies
+def make_strategies  
+  strategies=[[true, "7:30"], [true, "10:00"], [true, "11:45"],
+    [false, "12:30"], [false, "14:00"], [false, "16:00"]]
+  strategies.each do |strategy|
+    Strategy.create!(morning: strategy[0], time: strategy[1])
+  end
+end
+
+def update_strategies  
+  Strategy.delete_all
   strategies=[[true, "7:30"], [true, "10:00"], [true, "11:45"],
     [false, "12:30"], [false, "14:00"], [false, "16:00"]]
   strategies.each do |strategy|
