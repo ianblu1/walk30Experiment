@@ -74,7 +74,6 @@ class ParticipantsController < ApplicationController
     if participant
       participant.receiveMessage(content,Message::TEXT)
     end
-
   end
 
 end

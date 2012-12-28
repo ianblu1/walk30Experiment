@@ -20,7 +20,7 @@ Walk30Experiment::Application.routes.draw do
     end
   end
 
-  post "/twilio/receive/" => "participants#twilio_receive"
+  get "/twilio/receive/" => "static_pages#twilio_receive", :defaults => { :format => 'xml' } 
 
 
 
