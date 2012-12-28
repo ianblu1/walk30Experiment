@@ -80,7 +80,7 @@ class Participant < ActiveRecord::Base
     else
       strategy = lastMessage.strategy
     end
-    dateOfNextMessage = (Date.today.next).strftime
+    dateOfNextMessage = DateTime.now.in_time_zone('Pacific Time (US & Canada)').next.strftime('%F')
     timeOfNextMessage = strategy.time
     timeZone=self.time_zone
     nextMessageDateTime=dateOfNextMessage+' '+timeOfNextMessage+' '+timeZone
