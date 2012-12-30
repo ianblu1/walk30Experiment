@@ -95,7 +95,7 @@ class Participant < ActiveRecord::Base
     if self.pending?
       self.status = ACTIVE
       self.experiment_begun_at = DateTime.now()
-      self.send_welcome_message(Message::TEST)
+      self.send_welcome_message(Message::TEXT)
       self.save
     end
   end
