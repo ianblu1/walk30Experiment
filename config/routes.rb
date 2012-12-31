@@ -27,6 +27,7 @@ Walk30Experiment::Application.routes.draw do
   resources :messages do
     member do
       put :deliver
+      put :cancel
       put :flagPositive
       put :flagNegative
       put :flagNeutral

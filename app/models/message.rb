@@ -18,6 +18,11 @@ class Message < ActiveRecord::Base
   attr_accessible :content, :medium, :status, :scheduled_at, :subject
   belongs_to :participant
   
+  #twilio config info
+  TWILIO_ACCOUNT_SID = 'ACdec6d1b743c5ff2efe53908fdf2f2459'
+  TWILIO_AUTH_TOKEN = 'c0fc9928e631451677a1dcf713c54c54'
+  
+  
   #message mediums
   TEST = 0
   TEXT = 1
@@ -28,6 +33,7 @@ class Message < ActiveRecord::Base
   DELIVERED = 1
   RECEIVED = 2
   FAILED = 3    
+  CANCELED = 4
   
   #message flags
   NEUTRAL = 0
@@ -92,7 +98,7 @@ class Message < ActiveRecord::Base
   def failed?
     status==FAILED
   end
-  
+    
   def flagged?
     flag
   end
@@ -124,6 +130,15 @@ class Message < ActiveRecord::Base
     flag==NEUTRAL
   end
   
+  def canceled?
+    status==CANCELED
+  end
+  
+  def cancel
+    self.status=CANCELED
+    self.save
+  end
+  
   def mediumString
     if self.textMessage?
       return "TEXT"
@@ -143,6 +158,8 @@ class Message < ActiveRecord::Base
       return "DELIVERED"
     elsif self.failed?
       return "FAILED"
+    elsif self.canceled?
+      return "CANCELED"
     end
   end
   
@@ -160,9 +177,8 @@ class Message < ActiveRecord::Base
     if self.pending?
       return self.scheduled_at
     else
-      return self.sent_at
+      self.updated_at
     end
-    return DateTime.now
   end 
   
   def deliver()
@@ -202,9 +218,7 @@ class Message < ActiveRecord::Base
     to = '+1' + self.participant.phone
     body = self.content
     
-    @account_sid = 'ACdec6d1b743c5ff2efe53908fdf2f2459'
-    @auth_token = 'c0fc9928e631451677a1dcf713c54c54'
-    @client = Twilio::REST::Client.new(@account_sid, @auth_token)
+    @client = Twilio::REST::Client.new(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     
     twilio_message = @client.account.sms.messages.create({:from => from, :to => to, :body =>body})
     if twilio_message.status == "queued"

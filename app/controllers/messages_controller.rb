@@ -6,6 +6,11 @@ class MessagesController < ApplicationController
     redirect_to request.referer
   end
   
+  def cancel
+    Message.find(params[:id]).cancel
+    redirect_to request.referer
+  end  
+  
   def flagPositive
     Message.find(params[:id]).flagPositive
     redirect_to request.referer

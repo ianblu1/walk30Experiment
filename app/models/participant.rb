@@ -27,13 +27,9 @@ class Participant < ActiveRecord::Base
  
   #message status codes
   MESSAGE_PENDING = 0
-   
-  #message mediums
-  TEST = 0
-  TEXT = 1
-  EMAIL = 2
-  
-  PROJECT_MESSAGE_CONTENT="Walk30! Is now a good time?"
+     
+  PROJECT_MESSAGE_CONTENT="Walk30!\nReply \"yes\" if now is a good time for your daily reminder. Reply \"no\" if it isn't.\nReply \"walk\" when you go for your walk."
+  WELCOME_MESSAGE_CONTENT="Welcome to The Walk30 Project!\nWe'll send you a daily reminder to go for a walk. Reply with the text \"quit\" to opt out."
   
   before_save {|participant|
     participant.email=Participant.formatEmail(email)
@@ -66,7 +62,7 @@ class Participant < ActiveRecord::Base
   end
   
   def setNextProjectTextMessage()
-    self.setNextProjectMessage(TEXT)
+    self.setNextProjectMessage(Message::TEXT)
   end
   
   def setNextProjectMessage(medium)
@@ -95,16 +91,12 @@ class Participant < ActiveRecord::Base
     if self.pending?
       self.status = ACTIVE
       self.experiment_begun_at = DateTime.now()
-      self.send_welcome_message(Message::TEST)
       self.save
+      #Send the welcome message
+      self.deliverMessage(WELCOME_MESSAGE_CONTENT,Message::TEXT)
     end
   end
   
-  def send_welcome_message(medium)
-    content = "Welcome to the Walk 30 project!"
-    self.deliverMessage(content,medium)
-  end
-
   def reactivate
     self.status = ACTIVE
     self.experiment_ended_at = nil

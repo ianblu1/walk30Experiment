@@ -4,7 +4,7 @@
 		=submit_tag "Set Tomorrows' Messages", class: "btn btn-large btn-primary"
 		
 		
-%h1 All Participants
+%h1 Active Participants Only
 
 =will_paginate
 
@@ -17,6 +17,6 @@
 		%th Messages Received
 		%th Flags
 	%tbody
-		=render :partial => "participant_admin", :collection => @participants, :as => :participant
+		=render :partial => "active_participant", :collection => @participants, :as => :participant
 
 
