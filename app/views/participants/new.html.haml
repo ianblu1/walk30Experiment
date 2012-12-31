@@ -1,7 +1,7 @@
 -provide(:title, 'Sign Up')
 .container-narrow
 	.center
-		%h2 Fill in to enroll in the Walk30 Project
+		%h2 Fill in to join the Walk30 Project
 	.row
 		.span6.offset3
 			= form_for @participant do |f|
@@ -38,4 +38,4 @@
 				= recaptcha_tags :ssl=>true
 				%p			
 				%p
-				= f.submit "Enroll Me!", class: "btn btn-large btn-primary"
+				= f.submit "Sign Me Up!", class: "btn btn-large btn-primary"
