@@ -173,9 +173,11 @@ class Message < ActiveRecord::Base
     end
   end
   
-  def timeString
+  def dateTimeForDisplay
     if self.pending?
       return self.scheduled_at
+    elsif self.delivered?
+      self.sent_at
     else
       self.updated_at
     end
