@@ -4,8 +4,8 @@
 	- messagesToShow.each do |message|
 		%tr
 			%td=''
-			%td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
-			%td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
+			%td= message.dateTimeForDisplay.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
+			%td= message.dateTimeForDisplay.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
 				
 			-if message.received?
 				%td= ''

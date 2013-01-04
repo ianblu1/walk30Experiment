@@ -2,8 +2,8 @@
   %td= message.id	
   %td= message.mediumString
   %td= message.statusString
-  %td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
-  %td= message.timeString.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
+  %td= message.dateTimeForDisplay.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
+  %td= message.dateTimeForDisplay.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
   %td= message.summaryString
   -if message.pending?
     %td= link_to "deliver", deliver_message_path(message), :method => :put 
