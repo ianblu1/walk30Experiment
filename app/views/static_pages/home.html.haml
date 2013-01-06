@@ -2,7 +2,7 @@
 .container-narrow
 	.jumbotron.hero-unit
 		%h1 Welcome to the Walk30 Project!
-		= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary"
+		= link_to "Sign Up Now!", signup_path, class: "btn btn-large btn-primary"
 		
 	%hr
 	
@@ -27,18 +27,19 @@
 		.span6
 			%h4 How?
 			%p 
-				Well, you would start by signing up. All we need to get you going is a 
+				Well, you start by signing up. All we need to get you going is a 
 				valid email address and a cellphone number that can receive text messages,
-				as well as your zip code, so we know not text you in the middle of the night.
-				Answering the questions in the sign up form would definitely help us out when
-				we look to understand the results. Respond to the questions we ask, and have
-				fun!
+				as well as your zip code and time zone, so we know not text you in the middle of the 
+				night. Answering the questions in the sign up form will definitely help us understand
+				the results. Respond to the questions we ask, and have fun!
 			
 			%h4 When?
 			%p 
-				We're running right now! Hit the enroll button on this page and fill out 
-				the form. You'll participate for 30 days after you enroll. 
+				We're running right now! Hit the 
+				=link_to "Sign Up Now!", signup_path 
+				button on this page and fill out 
+				the form. You'll participate as long as you like after you sign up.
 				You can quit at any time, just by responding to one of our texts with 
 				"quit".
 				=link_to "Contact us", contact_path 
-				if you want to know more or with an questions or queries.
+				if you want to know more or with any questions or queries.
