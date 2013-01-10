@@ -178,6 +178,8 @@ class Message < ActiveRecord::Base
       return self.scheduled_at
     elsif self.delivered?
       self.sent_at
+    elsif self.received?
+      self.sent_at
     else
       self.updated_at
     end
