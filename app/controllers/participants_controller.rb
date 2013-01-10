@@ -9,9 +9,14 @@ class ParticipantsController < ApplicationController
     @participant = Participant.new(params[:participant])
     if verify_recaptcha
       if @participant.save
-        flash[:success] = "Welcome to Walk30!"
-        @participant.activate
-        redirect_to instructions_path
+        if @participant.activate
+          flash[:success] = "Welcome to Walk30!"
+          redirect_to instructions_path
+        else
+          Participant.delete(@participant.id)
+          flash[:error] = "Phone number is invalid"
+          redirect_to signup_path
+        end
       else
         render 'new'
       end
@@ -20,6 +25,10 @@ class ParticipantsController < ApplicationController
       render 'new'
     end
   end  
+  
+  def update
+    render 'new'
+  end
   
   def activate
       Participant.find(params[:id]).activate

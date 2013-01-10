@@ -86,14 +86,19 @@ class Participant < ActiveRecord::Base
     project_message.save
     return project_message
   end
-    
+
   def activate
-    if self.pending?
+    if true #self.pending?
       self.status = ACTIVE
       self.experiment_begun_at = DateTime.now()
       self.save
       #Send the welcome message
-      self.deliverMessage(WELCOME_MESSAGE_CONTENT,Message::TEXT)
+      begin
+        self.deliverMessage(WELCOME_MESSAGE_CONTENT,Message::TEXT)
+      rescue
+        return false
+      end
+      return true
     end
   end
   
@@ -110,15 +115,15 @@ class Participant < ActiveRecord::Base
   end
   
   def pending?
-    self.status%3==PENDING
+    self.status==PENDING
   end
   
   def active? 
-    self.status%3==ACTIVE
+    self.status==ACTIVE
   end
 
   def terminated? 
-    self.status%3==TERMINATED
+    self.status==TERMINATED
   end
   
   def days_active
