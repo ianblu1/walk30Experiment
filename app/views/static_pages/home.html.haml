@@ -1,9 +1,10 @@
--provide(:title, 'Welcome')
+-provide(:title, 'Welcome to the Walk30 Project!')
 .container-narrow
 	.jumbotron.hero-unit
-		%h1 Welcome to the Walk30 Project!
-		%h3 Join us in walking just 30 minutes a day, for a healthier happier you
-		= link_to "Click Here To Join In Now!", signup_path, class: "btn btn-large btn-primary"
+		%h1 The Walk30 Project
+		%h3 Join us in walking just 30 minutes a day, 
+		%h3 for a healthier, happier you!
+		= link_to "Click Here To Join Today!", signup_path, class: "btn btn-large btn-primary"
 		
 	%hr
 	
@@ -11,36 +12,22 @@
 		.span6
 			%h4 Why?
 			%p	
-				Cardiovascular disease and Diabetes are reaching epidemic proportions, 
-				with cases increasing in number each and every day. That's the bad news. 
-				The good news is that one of the most effective treatments is easy, free, 
-				and fun: moderate exercise. We'd be significantly healthier if we each 
-				walked just 30 minutes a day!
+				We sit too much, and it shows. Obesity in America is at an all-time high. 
+				diabetes is more and more common. Cardiovascular disease is still the 
+				leading cause of death. That's the bad news. 
+				The good news is that moderate exercise, in addition to being fun and free, is 
+				one of the most effective ways to prevent many of these chronic conditions. 
+				We'd be significantly healthier if we each walked just 30 minutes a day.
+		.span6
 			
 			%h4 What?
 			%p 
-				We lead busy, action-packed lives. Between responsibilities at home and at
-				the office, to our family and to our friends, it can be hard to remember
-				to take the time out to care for ourselves. Well, that's what the Walk30
-				Project is all about. We'll try to find the right strategy for you, to
-				remind you to get out and walk!
+				We want everyone to find the time for a daily walk, but 
+				know that exercise plans sometimes fall by the wayside.
+				Each day, we'll send you a "Walk30!" text message, encouraging you to step 
+				out for a short walk. 
+				By responding to these messages, you can help us find the best times for your 
+				daily reminder 
+				and let us know that you're part of a community that's committed to better health.
+
 			
-		.span6
-			%h4 How?
-			%p 
-				Well, you start by signing up. All we need to get you going is a 
-				valid email address and a cellphone number that can receive text messages,
-				as well as your zip code and time zone, so we know not text you in the middle of the 
-				night. Answering the questions in the sign up form will definitely help us understand
-				the results. Respond to the questions we ask, and have fun!
-			
-			%h4 When?
-			%p 
-				We're running right now! Hit the 
-				=link_to "Join In Now!", signup_path 
-				button on this page and fill out 
-				the form. You'll participate as long as you like after you sign up.
-				You can quit at any time, just by responding to one of our texts with 
-				"quit".
-				=link_to "Contact us", contact_path 
-				if you want to know more or with any questions or queries.

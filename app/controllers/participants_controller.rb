@@ -10,6 +10,7 @@ class ParticipantsController < ApplicationController
     if verify_recaptcha
       if @participant.save
         flash[:success] = "Welcome to Walk30!"
+        @participant.activate
         redirect_to instructions_path
       else
         render 'new'
