@@ -186,6 +186,11 @@ class Message < ActiveRecord::Base
   end 
   
   def deliver()
+    if not self.participant
+      self.delete
+      return
+    end
+    
     delivered = FALSE
     if self.status == PENDING
       if medium == TEXT

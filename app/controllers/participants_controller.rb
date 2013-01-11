@@ -14,14 +14,14 @@ class ParticipantsController < ApplicationController
           redirect_to instructions_path
         else
           Participant.delete(@participant.id)
-          flash[:error] = "Phone number is invalid"
+          flash[:error] = "Try again:\n We can't send text messages to the phone number you provided."
           redirect_to signup_path
         end
       else
         render 'new'
       end
     else
-      flash[:error] = "Something wrong with the captcha info."
+      flash[:error] = "Try again:\n Your captcha response didn't match. Are you a robot?"
       render 'new'
     end
   end  
