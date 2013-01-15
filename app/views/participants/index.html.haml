@@ -1,7 +1,9 @@
 -provide(:title, 'Active Participants')
-.offset6
+.center
 	= form_tag setNextDay_participants_path, method: 'put' do
 		=submit_tag "Set Tomorrows' Messages", class: "btn btn-large btn-primary"
+	= form_tag autoflag_participants_path, method: 'put' do
+		=submit_tag "Autoflag Messages", class: "btn btn-large btn-primary"
 		
 		
 %h1 Active Participants Only

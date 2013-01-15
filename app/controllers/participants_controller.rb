@@ -55,6 +55,11 @@ class ParticipantsController < ApplicationController
     redirect_to request.referer    
   end
   
+  def autoflag
+    Participant.autoflagParticipantMessages
+    redirect_to request.referer
+  end
+  
   def terminate
       Participant.find(params[:id]).terminate
       redirect_to request.referer

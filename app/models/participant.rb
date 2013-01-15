@@ -48,7 +48,14 @@ class Participant < ActiveRecord::Base
                         inclusion: {in: %w(PST EST CST MST AST AKST HAST NST), message: "Sorry, we currently support only North American Time Zones"}
                       
   default_scope order: 'participants.created_at DESC'
-  
+    
+  def self.autoflagParticipantMessages()
+    Participant.find_all_by_status(ACTIVE).each do |p|
+      p.autoflagReceivedMessages
+      p.autoflagDeliveredMessages
+    end
+  end
+    
   def self.setUpNextDaysTextMessages()
     for participant in Participant.find_all_by_status(ACTIVE)
       if participant.project_messages.find_all_by_status(MESSAGE_PENDING).count<1
@@ -86,7 +93,7 @@ class Participant < ActiveRecord::Base
     project_message.save
     return project_message
   end
-
+  
   def activate
     if true #self.pending?
       self.status = ACTIVE
@@ -184,6 +191,40 @@ class Participant < ActiveRecord::Base
       return self.days_pending
     end
   end
+
+  
+  def autoflagReceivedMessages
+    self.unflaggedMessages.select {|message| message.received?}.each do |m|
+      c = m.content.downcase
+      if c.length < 7
+        if /yes/.match(c) or /walk/.match(c) 
+          m.flagPositive
+        elsif /no/.match(c)
+          m.flagNegative
+        end
+      end
+    end
+  end
+  
+  def autoflagDeliveredMessages
+    dms = self.deliveredMessages
+    dms.zip(dms.map{|m| m.sent_at}[1..dms.length]<<DateTime.now).each do |dm,t|
+      if dm.flag.is_a? NilClass
+        rms = self.messagesReceivedBetweenTimes(dm.sent_at,t)
+        if rms.map{|m| m.flagPositive?}.reduce(:&)
+          dm.flagPositive
+        elsif rms.map{|m| m.flagNegative?}.reduce(:&)
+          dm.flagNegative
+        elsif rms.map{|m| m.flagNeutral?}.reduce(:&) or rms.length == 0 
+          dm.flagNeutral
+        end
+      end
+    end
+  end
+  
+  def messagesReceivedBetweenTimes(t1,t2)
+    return self.receivedMessages.select {|m| t1 < m.sent_at and m.sent_at< t2}
+  end  
   
   def unflaggedMessages
     return self.messages.select {|message| not message.flagged?}
