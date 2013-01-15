@@ -29,7 +29,7 @@ class Participant < ActiveRecord::Base
   MESSAGE_PENDING = 0
      
   PROJECT_MESSAGE_CONTENT="Walk30!\nReply \"yes\" if now is a good time for your daily reminder. Reply \"no\" if it isn't.\nReply \"walk\" when you go for your walk."
-  WELCOME_MESSAGE_CONTENT="Welcome to The Walk30 Project!\nWe'll send you a daily reminder to go for a walk. Reply \"quit\" to opt out."
+  WELCOME_MESSAGE_CONTENT="Welcome to The Walk30 Project!\nWe'll send you a daily reminder to go for a walk. Reply \"quit\" to opt out. Msg&Data rates may apply."
   
   before_save {|participant|
     participant.email=Participant.formatEmail(email)
