@@ -11,6 +11,7 @@ Walk30Experiment::Application.routes.draw do
     collection do
       get :summary
       put :setNextDay
+      put :autoflag
     end
     member do
       put :activate
