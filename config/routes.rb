@@ -49,6 +49,7 @@ Walk30Experiment::Application.routes.draw do
   match '/contact', to: 'static_pages#contact'
   match '/signup', to: "participants#new"
   match '/instructions', to: 'static_pages#instructions'
+  match '/welcome', to: 'static_pages#welcome'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

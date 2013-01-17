@@ -10,8 +10,7 @@ class ParticipantsController < ApplicationController
     if verify_recaptcha
       if @participant.save
         if @participant.activate
-          flash[:success] = "Welcome to Walk30!"
-          redirect_to instructions_path
+          redirect_to welcome_path
         else
           Participant.delete(@participant.id)
           flash[:error] = "Try again:\n We can't send text messages to the phone number you provided."
