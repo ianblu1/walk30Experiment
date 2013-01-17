@@ -1,0 +1,31 @@
+-if defined? header and header==true
+	%tr
+		%th ID
+		%th Date
+		%th PST Time
+		%th Message Sent
+		%th Message Received
+		%th Actions
+			
+-if defined? participant and defined? messages
+	%tr
+		%td= link_to participant.id, participant
+	-messages.each do |m|
+		-if m.delivered? or m.received?
+			-time = m.sent_at
+		-elsif m.pending? 
+			-time = m.scheduled_at
+		-else
+			-time = m.updated_at
+		%tr
+			%td
+			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
+			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
+			-if m.delivered?
+				%td= m.summaryString
+				%td
+			-elsif m.received?
+				%td
+				%td= m.summaryString
+			%td{:nowrap=>true}
+				=render "/messages/action_paths", :message=>m

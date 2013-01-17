@@ -8,6 +8,7 @@ class ParticipantsController < ApplicationController
   def create
     @participant = Participant.new(params[:participant])
     if verify_recaptcha
+      flash.discard(:recaptcha_error)
       if @participant.save
         if @participant.activate
           redirect_to welcome_path
@@ -20,7 +21,8 @@ class ParticipantsController < ApplicationController
         render 'new'
       end
     else
-      flash[:error] = "Try again:\n Your captcha response didn't match. Are you a robot?"
+      @participant.valid?
+      flash[:recaptcha_error] = "Try again:\n Your captcha response didn't match. Are you a robot?"
       render 'new'
     end
   end  
@@ -64,7 +66,7 @@ class ParticipantsController < ApplicationController
       redirect_to request.referer
   end
       
-  def index
+  def active
     @count_pendingMessages=ProjectMessage.find_all_by_status(0).count
     @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
@@ -77,8 +79,12 @@ class ParticipantsController < ApplicationController
     @messages = @participant.messages(page: params[:page]).sort_by {|message| message.id}
   end
   
-  def summary
+  def index
     @participants = Participant.paginate(page: params[:page])
   end  
   
+  def destroy
+    Participant.find(params[:id]).delete
+  end
+    
 end

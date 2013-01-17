@@ -1,0 +1,8 @@
+-if participant.pending?
+	=link_to "activate", activate_participant_path(participant), :method => :put
+	=link_to "delete", participant, :method => :delete
+-elsif participant.active?
+	=link_to "terminate", terminate_participant_path(participant), :method => :put
+-elsif participant.terminated?
+	=link_to "reactivate", reactivate_participant_path(participant), :method => :put
+	=link_to "delete", participant, :method => :delete

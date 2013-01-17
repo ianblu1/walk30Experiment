@@ -1,0 +1,18 @@
+-provide(:title, 'Active Participants')
+.center
+	= form_tag setNextDay_participants_path, method: 'put' do
+		=submit_tag "Set Tomorrows' Messages", class: "btn btn-large btn-primary"
+	= form_tag autoflag_participants_path, method: 'put' do
+		=submit_tag "Autoflag Messages", class: "btn btn-large btn-primary"
+		
+		
+%h1 Active Participants Only
+
+=will_paginate
+
+%table{:cellspacing => "5"}
+	=render "/participants/active_participant_table", :header=>true
+	-@participants.each do |participant|
+		-messages = participant.messagesUnflaggedOrChangedWithinNSeconds(3600).sort_by{|message| message.id}
+		=render "/participants/active_participant_table", :participant=>participant, :messages=>messages
+	

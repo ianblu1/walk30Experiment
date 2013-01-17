@@ -1,0 +1,23 @@
+%table
+	%tr
+		%th ID
+		%th STATUS
+		%th Days in STATUS
+		%th EMAIL
+		%th PHONE
+		%th Messages Delivered
+		%th Messages Received
+		%th Messages Pending
+		%th Actions
+	-participants.each do |p|
+		%tr
+			%td= link_to p.id, p	
+			%td= p.statusString
+			%td= '%.2f' % p.days_in_status
+			%td= p.email
+			%td= p.phone
+			%td= p.deliveredMessages.length
+			%td= p.receivedMessages.length
+			%td= p.pendingMessages.length
+			%td{:nowrap=>true}= render "/participants/action_paths", :participant=>p
+				

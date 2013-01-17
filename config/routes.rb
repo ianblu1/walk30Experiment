@@ -9,7 +9,7 @@ Walk30Experiment::Application.routes.draw do
   
   resources :participants do
     collection do
-      get :summary
+      get :active
       put :setNextDay
       put :autoflag
     end

@@ -29,6 +29,11 @@ class MessagesController < ApplicationController
   def summary
     @participants = Participant.paginate(page: params[:page])
   end  
+  
+  def destroy
+    Message.find(params[:id]).delete
+    redirect_to request.referer
+  end
 
 
 end

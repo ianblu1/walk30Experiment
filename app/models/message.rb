@@ -15,7 +15,7 @@
 #
 
 class Message < ActiveRecord::Base
-  attr_accessible :content, :medium, :status, :scheduled_at, :subject
+  attr_accessible :content, :medium, :status, :scheduled_at, :sent_at, :subject
   belongs_to :participant
   
   #twilio config info

@@ -1,0 +1,9 @@
+%div{:id=>"errors"}
+	-if object.errors.any? 
+		%div{:class=>"alert alert-error"}
+			="The form contains #{pluralize(object.errors.count, "error")}:"
+			%ul
+				-object.errors.full_messages.each do |msg|
+					%li
+						="*#{msg}"
+						
