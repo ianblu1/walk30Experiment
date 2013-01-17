@@ -5,14 +5,14 @@
 -if message.delivered? or message.received?
 	Flag: 
 	- if message.flagNegative? 
-		"negative" 
+		negative 
 	-else
 		=link_to "negative", flagNegative_message_path(message), :method => :put  
 	- if message.flagNeutral? 
-		"neutral" 
+		neutral 
 	-else
 		=link_to "neutral", flagNeutral_message_path(message), :method => :put  
 	- if message.flagPositive? 
-		= "positive" 
+		positive 
 	-else
 		=link_to "positive", flagPositive_message_path(message), :method => :put  
