@@ -21,7 +21,7 @@
 			%td
 			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
 			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
-			-if m.delivered?
+			-if m.delivered? or m.pending?
 				%td= m.summaryString
 				%td
 			-elsif m.received?
