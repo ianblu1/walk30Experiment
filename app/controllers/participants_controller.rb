@@ -85,6 +85,7 @@ class ParticipantsController < ApplicationController
   
   def destroy
     Participant.find(params[:id]).delete
+    redirect_to request.referer
   end
     
 end
