@@ -1,10 +1,13 @@
--provide(:title, 'Welcome to the Walk30 Project!')
+-provide(:title, 'Walk 30 minutes a day for a happier, healthier you!')
 .container-narrow
 	.jumbotron.hero-unit
 		%h1 The Walk30 Project
 		%h3 Join us in walking just 30 minutes a day, 
 		%h3 for a healthier, happier you!
 		= link_to "Click Here To Join Today!", signup_path, class: "btn btn-large btn-primary"
+		%p
+		%p Like us on Facebook and Share with your Friends!
+		.fb-like{:data=>{:href => "https://www.walk-30.com", :send => "true", :width => "450", :show_faces => "false"}}
 		
 	-# %hr
 	

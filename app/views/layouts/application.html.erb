@@ -7,10 +7,23 @@
   <%= csrf_meta_tags %>
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->  
+    <![endif]--> 
+    <meta property="og:title" content="The Walk30 Project" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://www.walk-30.com" />
+	<meta property="og:image" content="walk-30.png" />
+	<meta property="og:site_name" content="The Walk30 Project" />
+	<meta property="fb:app_id" content="10150429722210603" /> 
 </head>
 <body>
-
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 <div>
 	<div class="container-narrow">
 	<%= render 'layouts/header' %>	
@@ -23,5 +36,6 @@
 <% if Rails.env.production? %>
 	<%= render 'layouts/ga' %>
 <%end%>
+
 </body>
 </html>

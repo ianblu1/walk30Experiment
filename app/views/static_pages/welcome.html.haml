@@ -1,7 +1,9 @@
--provide(:title, 'Welcome')
+-provide(:title, 'Welcome!')
 .container-narrow
 	.jumbotron.hero-unit
 		%h2 Welcome To The Walk30 Project!
+		%h3 Like us on Facebook and share with your friends!
+		.fb-like{:data=>{:href => "https://www.walk-30.com", :send => "true", :width => "450", :show_faces => "false"}}
 
 .container-narrow
 	%h3 How it works
