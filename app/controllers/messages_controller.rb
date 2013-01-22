@@ -11,23 +11,18 @@ class MessagesController < ApplicationController
     redirect_to request.referer
   end  
   
-  def flagPositive
-    Message.find(params[:id]).flagPositive
+  def update
+    m = Message.find(params[:id])
+    if params[:flagPositive]
+      m.flagPositive
+    end
+    if params[:flagNegative]
+      m.flagNegative
+    end
+    if params[:flagNeutral]
+      m.flagNeutral
+    end
     redirect_to request.referer
-  end
-
-  def flagNegative
-    Message.find(params[:id]).flagNegative
-    redirect_to request.referer
-  end
-
-  def flagNeutral
-    Message.find(params[:id]).flagNeutral
-    redirect_to request.referer
-  end
-  
-  def summary
-    @participants = Participant.paginate(page: params[:page])
   end  
   
   def destroy

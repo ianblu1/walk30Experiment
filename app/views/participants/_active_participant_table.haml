@@ -17,11 +17,12 @@
 			-time = m.scheduled_at
 		-else
 			-time = m.updated_at
+		-time = time.in_time_zone(m.participant.time_zone)
 		%tr
 			%td
-			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
-			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
-			-if m.delivered? or m.pending?
+			%td= time.strftime("%m/%d")
+			%td= time.strftime("%I:%M%p")
+			-if m.delivered? or m.pending? or m.canceled?
 				%td= m.summaryString
 				%td
 			-elsif m.received?

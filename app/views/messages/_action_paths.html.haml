@@ -1,18 +1,20 @@
--if message.pending?
+-if message.pending? 
 	=link_to "deliver", deliver_message_path(message), :method => :put 
 	=link_to "cancel", cancel_message_path(message), :method => :put
-	=link_to "delete", message, :method => :delete
+	=link_to "delete", message_path(message), :method => :delete
+-if message.canceled? or message.failed?
+	=link_to "delete", message_path(message), :method => :delete
 -if message.delivered? or message.received?
 	Flag: 
 	- if message.flagNegative? 
 		negative 
 	-else
-		=link_to "negative", flagNegative_message_path(message), :method => :put  
+		=link_to "negative", message_path(message,flagNegative:true), :method => :put  
 	- if message.flagNeutral? 
 		neutral 
 	-else
-		=link_to "neutral", flagNeutral_message_path(message), :method => :put  
+		=link_to "neutral", message_path(message,flagNeutral:true), :method => :put  
 	- if message.flagPositive? 
 		positive 
 	-else
-		=link_to "positive", flagPositive_message_path(message), :method => :put  
+		=link_to "positive", message_path(message,flagPositive:true), :method => :put  

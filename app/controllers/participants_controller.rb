@@ -28,17 +28,19 @@ class ParticipantsController < ApplicationController
   end  
   
   def update
-    render 'new'
-  end
-  
-  def activate
-      Participant.find(params[:id]).activate
-      redirect_to request.referer
-  end
-
-  def reactivate
-      Participant.find(params[:id]).reactivate
-      redirect_to request.referer
+    puts params
+    p = Participant.find(params[:id])
+    if params[:activate]
+      p.activate
+    end
+    if params[:reactivate]
+      p.reactivate
+    end
+    if params[:terminate]
+      p.terminate
+    end
+    p.save
+    redirect_to request.referer
   end
 
   def deliverMessage
@@ -52,24 +54,20 @@ class ParticipantsController < ApplicationController
   end
 
   def setNextDay    
-    Participant.setUpNextDaysTextMessages()
+    Participant.all.each {|p| p.setNextReminderMessage}
     redirect_to request.referer    
   end
   
   def autoflag
-    Participant.autoflagParticipantMessages
+    DailyReminderMessage.all.each {|m| m.autoflag}
     redirect_to request.referer
-  end
-  
-  def terminate
-      Participant.find(params[:id]).terminate
-      redirect_to request.referer
-  end
+  end  
       
   def active
     @count_pendingMessages=ProjectMessage.find_all_by_status(0).count
     @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
+    @messages_filter =
     @Participant = Participant
   end
   

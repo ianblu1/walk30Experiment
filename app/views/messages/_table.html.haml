@@ -4,7 +4,7 @@
 		%th Medium
 		%th Status
 		%th Date
-		%th Time
+		%th Local Time
 		%th Summary
 		%th Actions
 	-messages.each do |m|
@@ -15,11 +15,12 @@
 				-time = m.scheduled_at
 			-else
 				-time = m.updated_at
+			-time = time.in_time_zone(m.participant.time_zone)
 			%td= m.id
 			%td= m.mediumString
 			%td= m.statusString
-			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%m/%d")
-			%td= time.in_time_zone("Pacific Time (US & Canada)").strftime("%I:%M%p")
+			%td= time.strftime("%m/%d")
+			%td= time.strftime("%I:%M%p")
 			%td= m.summaryString
 			%td{:nowrap=>true}
 				=render "/messages/action_paths", :message=>m

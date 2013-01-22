@@ -16,9 +16,11 @@
 #
 
 class Participant < ActiveRecord::Base
-  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week, :time_zone
+  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week#, :time_zone
   has_many :messages, :dependent => :destroy
   has_many :project_messages, :dependent => :destroy  
+  
+  ReceivedMessageHandlers = WalkReceivedAutoreply, ReceivedMessageAutoflag
   
   #Status values
   PENDING = 0
@@ -45,56 +47,47 @@ class Participant < ActiveRecord::Base
   VALID_PHONE_REGEX = /^[\(\)0-9\- \+\.]{10,20}$/ 
   validates :phone, presence: true,
                     format: { with: VALID_PHONE_REGEX, message: "must be a valid phone number"}
-  validates :time_zone, presence: true,
-                        inclusion: {in: %w(PST EST CST MST AST AKST HAST NST), message: "Sorry, we currently support only North American Time Zones"}
+  
+  validates :zip_code, presence: true
+  
+#  validates :time_zone, presence: true,
+#                        inclusion: {in: %w(PST EST CST MST AST AKST HAST NST), message: "Sorry, we currently support only North American Time Zones"}
+
+
+  def time_zone 
+    ActiveSupport::TimeZone.find_by_zipcode(self.zip_code)
+  end
                       
   default_scope order: 'participants.created_at DESC'
-    
-  def self.autoflagParticipantMessages()
-    Participant.find_all_by_status(ACTIVE).each do |p|
-      p.autoflagReceivedMessages
-      p.autoflagDeliveredMessages
-    end
+  
+  def self.withPhone(phone)
+    return Participant.find_by_phone(Participant.formatPhone(phone))
   end
     
-  def self.setUpNextDaysTextMessages()
-    for participant in Participant.find_all_by_status(ACTIVE)
-      if participant.project_messages.find_all_by_status(MESSAGE_PENDING).count<1
-        participant.setNextProjectTextMessage()
-      end
-    end    
+  #Daily reminder stuff
+  
+      
+  def dailyReminderStrategy
+    IanReminderStrategy
   end
   
-  def strategyList()
-    return Strategy.where(morning:self.morning_reminder)
-  end
-  
-  def setNextProjectTextMessage()
-    self.setNextProjectMessage(Message::TEXT)
-  end
-  
-  def setNextProjectMessage(medium)
-    strategies = strategyList()
-    numMessages=self.project_messages.count
-    lastMessage = self.project_messages.last
-    if numMessages < 1 
-      strategy = strategies[Random.rand(strategies.length)]
-    elsif !lastMessage.flagPositive?
-      strategy = strategies[Random.rand(strategies.length)]
-    else
-      strategy = lastMessage.strategy
+  def setNextReminderMessage
+    if not self.pendingReminderMessages?
+      m = self.dailyReminderStrategy.nextReminderMessage(self)
+      m.save
     end
-    dateOfNextMessage = DateTime.now.in_time_zone('Pacific Time (US & Canada)').next.strftime('%F')
-    timeOfNextMessage = strategy.time
-    timeZone=self.time_zone
-    nextMessageDateTime=dateOfNextMessage+' '+timeOfNextMessage+' '+timeZone
-    dateTime=DateTime.strptime(nextMessageDateTime, '%Y-%m-%d %k:%M %Z')
-    project_message = self.project_messages.build(content:PROJECT_MESSAGE_CONTENT,medium:medium,status:Message::PENDING,scheduled_at:dateTime)
-    project_message.strategy = strategy
-    project_message.save
-    return project_message
   end
   
+  def pendingReminderMessages?
+    self.dailyReminderStrategy.pendingReminderMessages(self).length>0
+  end
+      
+  def messagesUnflaggedOrChangedWithinNSeconds(n)
+    return self.messages.select {|message| not message.flagged? or message.secondsSinceLastUpdate < n}    
+  end
+  
+  #Setting and querying participant status
+    
   def activate
     if true #self.pending?
       self.status = ACTIVE
@@ -193,96 +186,23 @@ class Participant < ActiveRecord::Base
       return self.days_pending
     end
   end
-
   
-  def autoflagReceivedMessages
-    self.unflaggedMessages.select {|message| message.received?}.each do |m|
-      c = m.content.downcase
-      if c.length < 7
-        if /yes/.match(c) or /walk/.match(c) 
-          m.flagPositive
-        elsif /no/.match(c)
-          m.flagNegative
-        end
-      end
-    end
-  end
-  
-  def autoflagDeliveredMessages
-    dms = self.deliveredMessages
-    dms.zip(dms.map{|m| m.sent_at}[1..dms.length]<<DateTime.now).each do |dm,t|
-      if dm.flag.is_a? NilClass
-        rms = self.messagesReceivedBetweenTimes(dm.sent_at,t)
-        if rms.map{|m| m.flagPositive?}.reduce(:&)
-          dm.flagPositive
-        elsif rms.map{|m| m.flagNegative?}.reduce(:&)
-          dm.flagNegative
-        elsif rms.map{|m| m.flagNeutral?}.reduce(:&) or rms.length == 0 
-          dm.flagNeutral
-        end
-      end
-    end
-  end
-  
-  def messagesReceivedBetweenTimes(t1,t2)
-    return self.receivedMessages.select {|m| t1 < m.sent_at and m.sent_at< t2}
-  end  
-  
-  def unflaggedMessages
-    return self.messages.select {|message| not message.flagged?}
-  end
-
-  def messagesUnflaggedOrChangedWithinNSeconds(n)
-    return self.messages.select {|message| not message.flagged? or message.secondsSinceLastUpdate < n}    
-  end
-  
-  def deliveredMessages
-    return self.messages.select {|message| message.delivered?}
-  end
-
-  def receivedMessages
-    return self.messages.select {|message| message.received?}
-  end
-
-  def pendingMessages
-    return self.messages.select {|message| message.pending?}
-  end
-  
-  def testMessageWithDelayInMinutes(content,delay)
-    time = DateTime.now() + delay/24/60
-    pendingMessageWithTime(content,Message::TEST,time)
-    return 
-  end
-        
-  def deliverMessage(content,medium)
-    message = self.messages.build(content:content,medium:medium,status:Message::PENDING,scheduled_at:DateTime.now)
-    message.save
-    return message.deliver()
-  end
-  
-  def messageDelivered(message)
-    puts "Message was delivered succesfully"
-  end
+  #Message handling
   
   def receiveMessage(content,medium)
     message = self.messages.build(content:content,medium:medium,status:Message::RECEIVED)
     message.save
-  end
-  
-  def pendingMessageWithTime(content,medium,dateTime)
-    message = self.messages.build(content:content,medium:medium,status:Message::PENDING,scheduled_at:dateTime)
-    message.save
+    ReceivedMessageHandlers.each do |h| 
+      h.respondToMessage(message)
+    end
     return message
   end
-  
-  def self.participantWithEmail(email)
-    return Participant.find_by_email(Participant.formatEmail(email))
+
+  def messageDelivered(message)
+    return message
   end
 
-  def self.participantWithPhone(phone)
-    return Participant.find_by_phone(Participant.formatPhone(phone))
-  end
-                   
+                     
   protected
   def self.formatPhone(phone)
     return phone.gsub(/\D/, '')

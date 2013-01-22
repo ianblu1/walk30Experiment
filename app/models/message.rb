@@ -15,7 +15,7 @@
 #
 
 class Message < ActiveRecord::Base
-  attr_accessible :content, :medium, :status, :scheduled_at, :sent_at, :subject
+  attr_accessible :content, :medium, :status, :scheduled_at, :sent_at, :subject, :type
   belongs_to :participant
   
   #twilio config info
@@ -47,10 +47,10 @@ class Message < ActiveRecord::Base
 
   validates :content, presence: true
   
-  validates :content, length: { maximum: 140 }, :if => :textMessage?
+  validates :content, length: { maximum: 155 }, :if => :textMessage?
   validates :subject, length: { maximum: 0 }, :if => :textMessage?
 
-  validates :subject, length: { maximum: 140 }, :if => :email?
+  validates :subject, length: { maximum: 155 }, :if => :email?
 
   before_create {|message| 
                 message.sent_at = DateTime.now if message.received?
@@ -65,6 +65,19 @@ class Message < ActiveRecord::Base
       end
     end
     return i
+  end
+  
+  def replies
+    if self.sent_at
+      ms = self.participant.messages.select {|m| m.sent_at and m.sent_at> self.sent_at}
+      if self.delivered?
+        upper_time = ms.select{|m| m.delivered? and m.sent_at}.map{|m| m.sent_at}.min
+        ms.select {|m| m.sent_at and m.sent_at < upper_time and m.received?}
+      elsif self.received?
+        upper_time = ms.select{|m| m.received? and m.sent_at}.map{|m| m.sent_at}.min
+        ms.select {|m| m.sent_at and m.sent_at < upper_time and m.delivered?}
+      end
+    end
   end
   
   def secondsSinceLastUpdate

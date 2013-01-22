@@ -12,7 +12,7 @@ gem 'cancan'
 gem 'twilio-ruby'
 gem 'pg'
 gem 'cancan'
-
+gem 'tzip'
 
 group :development, :test do
   gem 'factory_girl_rails', '4.1.0'

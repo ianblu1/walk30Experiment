@@ -16,8 +16,8 @@
 			%td= '%.2f' % p.days_in_status
 			%td= p.email
 			%td= p.phone
-			%td= p.deliveredMessages.length
-			%td= p.receivedMessages.length
-			%td= p.pendingMessages.length
+			%td= p.messages.where(status:Message::DELIVERED).length
+			%td= p.messages.where(status:Message::RECEIVED).length
+			%td= p.messages.where(status:Message::PENDING).length
 			%td{:nowrap=>true}= render "/participants/action_paths", :participant=>p
 				
