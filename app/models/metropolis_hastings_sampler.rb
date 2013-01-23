@@ -1,4 +1,3 @@
-require 'simple-random'
 
 class MetropolisHastingsSampler
   
