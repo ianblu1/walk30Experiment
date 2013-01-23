@@ -20,7 +20,7 @@ class IanReminderStrategy < DailyReminderStrategy
     if previousReminders.length > 0
       lastMessage = previousReminders.last
       if lastMessage.flagPositive?
-        nextMessageDateTime = lastMessage.scheduled_at
+        nextMessageDateTime = lastMessage.scheduled_at + 24*60*60
       end
     end
     return nextMessageDateTime
