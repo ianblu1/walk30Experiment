@@ -2,7 +2,7 @@
 	%tr
 		%th ID
 		%th Date
-		%th PST Time
+		%th Time (local)
 		%th Message Sent
 		%th Message Received
 		%th Actions
@@ -17,7 +17,7 @@
 			-time = m.scheduled_at
 		-else
 			-time = m.updated_at
-		-time = time.in_time_zone(m.participant.time_zone)
+		-time = time.in_time_zone(m.participant.time_zone_long)
 		%tr
 			%td
 			%td= time.strftime("%m/%d")

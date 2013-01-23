@@ -14,7 +14,7 @@ class IanReminderStrategy < DailyReminderStrategy
     
   def self.nextReminderDateTime(participant)
     Time.zone = "Pacific Time (US & Canada)"
-    nextMessageDateTimeString = DateTime.tomorrow.to_s + " " + self.randomMessageTimeString(participant) + " " + participant.time_zone
+    nextMessageDateTimeString = DateTime.tomorrow.to_s + " " + self.randomMessageTimeString(participant) + " " + participant.time_zone_long
     nextMessageDateTime = DateTime.strptime(nextMessageDateTimeString, '%Y-%m-%d %k:%M %Z')    
     previousReminders = self.deliveredReminderMessages(participant)
     if previousReminders.length > 0

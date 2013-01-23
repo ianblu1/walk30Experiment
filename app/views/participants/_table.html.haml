@@ -5,6 +5,8 @@
 		%th Days in STATUS
 		%th EMAIL
 		%th PHONE
+		%th ZIP
+		%th Time Zone
 		%th Messages Delivered
 		%th Messages Received
 		%th Messages Pending
@@ -16,6 +18,8 @@
 			%td= '%.2f' % p.days_in_status
 			%td= p.email
 			%td= p.phone
+			%td= p.zip_code
+			%td= p.time_zone
 			%td= p.messages.where(status:Message::DELIVERED).length
 			%td= p.messages.where(status:Message::RECEIVED).length
 			%td= p.messages.where(status:Message::PENDING).length

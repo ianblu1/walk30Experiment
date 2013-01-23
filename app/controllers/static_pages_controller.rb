@@ -10,7 +10,7 @@ class StaticPagesController < ApplicationController
   
   def welcome
   end
-  
+    
   def twilio_receive
     phone = params[:From][2..11]
     content = params[:Body]

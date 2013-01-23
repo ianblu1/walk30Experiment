@@ -4,40 +4,27 @@ Walk30Experiment::Application.routes.draw do
   devise_scope :user do
     match "/login", to: "devise/sessions#new"
   end
-  
-  resources :robot_participants, :controller => "participants", :type => "RobotParticipant"
-  
+    
   resources :participants do
     collection do
       get :active
-      put :setNextDay
-      put :autoflag
+      put :setNextReminders
     end
     member do
-      put :activate
-      put :terminate
-      put :reactivate
       post :deliverMessage
     end
   end
 
   get "/twilio/receive/" => "static_pages#twilio_receive", :defaults => { :format => 'xml' } 
 
-
-
   resources :messages do
+    collection do
+      put :cancel_pending
+      put :autoflag
+    end
     member do
       put :deliver
       put :cancel
-      put :flagPositive
-      put :flagNegative
-      put :flagNeutral
-    end
-  end
-  
-  resources :project_messages, :controller => "messages", :type => "ProjectMessage" do
-    member do
-      put :deliver
       put :flagPositive
       put :flagNegative
       put :flagNeutral

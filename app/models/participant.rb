@@ -50,13 +50,30 @@ class Participant < ActiveRecord::Base
   
   validates :zip_code, presence: true
   
-#  validates :time_zone, presence: true,
-#                        inclusion: {in: %w(PST EST CST MST AST AKST HAST NST), message: "Sorry, we currently support only North American Time Zones"}
+  validates :time_zone, presence: true,
+                        inclusion: {in: %w(PST EST CST MST AKST HAST NST), message: "Sorry, we currently support only North American Time Zones"}
 
 
-  def time_zone 
-    ActiveSupport::TimeZone.find_by_zipcode(self.zip_code)
+  def time_zone_long
+    case self.time_zone
+    when "PST"
+      "Pacific Time (US & Canada)"
+    when "AKST"
+      "Alaska"
+    when "EST"
+      "Eastern Time (US & Canada)" 
+    when "CST"
+      "Central Time (US & Canada)" 
+    when "HST"
+      "Hawaii"
+    when "MST"
+      "Mountain Time (US & Canada)"
+    end
   end
+    
+#  def time_zone 
+#    ActiveSupport::TimeZone.find_by_zipcode(self.zip_code)
+#  end
                       
   default_scope order: 'participants.created_at DESC'
   

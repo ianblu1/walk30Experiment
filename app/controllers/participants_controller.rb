@@ -53,18 +53,13 @@ class ParticipantsController < ApplicationController
     redirect_to request.referer
   end
 
-  def setNextDay    
-    Participant.all.each {|p| p.setNextReminderMessage}
+  def setNextReminders    
+    Participant.find_all_by_status(Participant::ACTIVE).each {|p| p.setNextReminderMessage}
     redirect_to request.referer    
   end
-  
-  def autoflag
-    DailyReminderMessage.all.each {|m| m.autoflag}
-    redirect_to request.referer
-  end  
-      
+          
   def active
-    @count_pendingMessages=ProjectMessage.find_all_by_status(0).count
+    @count_pendingMessages=ProjectMessage.find_all_by_status(Message::PENDING).count
     @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
     @messages_filter =

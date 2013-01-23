@@ -15,7 +15,7 @@
 				-time = m.scheduled_at
 			-else
 				-time = m.updated_at
-			-time = time.in_time_zone(m.participant.time_zone)
+			-time = time.in_time_zone(m.participant.time_zone_long)
 			%td= m.id
 			%td= m.mediumString
 			%td= m.statusString
