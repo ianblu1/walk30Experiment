@@ -72,9 +72,11 @@ class Message < ActiveRecord::Base
       ms = self.participant.messages.select {|m| m.sent_at and m.sent_at> self.sent_at}
       if self.delivered?
         upper_time = ms.select{|m| m.delivered? and m.sent_at}.map{|m| m.sent_at}.min
+        upper_time = Time.now if not upper_time
         ms.select {|m| m.sent_at and m.sent_at < upper_time and m.received?}
       elsif self.received?
         upper_time = ms.select{|m| m.received? and m.sent_at}.map{|m| m.sent_at}.min
+        upper_time = Time.now if not upper_time
         ms.select {|m| m.sent_at and m.sent_at < upper_time and m.delivered?}
       end
     end

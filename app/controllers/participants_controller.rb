@@ -51,6 +51,39 @@ class ParticipantsController < ApplicationController
       Participant.find(params[:id]).pendingMessageWithTime(params[:content],params[:medium],time)
     end
     redirect_to request.referer
+  end	
+  
+  def mass_message
+    medium = Message::TEST
+    content = params[:content]
+    status = params[:participant_status]
+    timing = params[:timing]
+    if status and timing and content and content.length > 0 and params[:submit] == "schedule_message"
+      Participant.find_all_by_status(status).each do |p|
+        Time.zone = "Pacific Time (US & Canada)"        
+        case timing
+        when "with_next_pending_message" 
+          time = p.messages.find_all_by_status(Message::PENDING).map {|m| m.scheduled_at}.min
+        when "next_noon_local"
+          tString = (DateTime.tomorrow-24*60*60).to_s + " 12:00 " + p.time_zone_long
+          time = DateTime.strptime(tString, '%Y-%m-%d %k:%M %Z')   
+          while time < DateTime.now
+            time += 24*60*60
+          end
+        when "tomorrow_noon_local"
+          tString = DateTime.tomorrow.to_s + " 12:00 " + p.time_zone_long
+          time = DateTime.strptime(tString, '%Y-%m-%d %k:%M %Z')              
+        when "in_15_minutes"
+          time = DateTime.now + 15.0/(24*60)
+        end
+        puts time
+        if time
+          message = p.messages.build(medium:medium,status:Message::PENDING,content:content, scheduled_at:time)
+          message.save
+        end
+      end
+      redirect_to active_participants_path
+    end                            
   end
 
   def setNextReminders    
@@ -75,7 +108,7 @@ class ParticipantsController < ApplicationController
   def index
     @participants = Participant.paginate(page: params[:page])
   end  
-  
+    
   def destroy
     Participant.find(params[:id]).delete
     redirect_to request.referer

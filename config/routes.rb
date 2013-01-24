@@ -9,6 +9,7 @@ Walk30Experiment::Application.routes.draw do
     collection do
       get :active
       put :setNextReminders
+      get :mass_message
     end
     member do
       post :deliverMessage

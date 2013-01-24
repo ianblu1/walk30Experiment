@@ -6,6 +6,7 @@
         	<% if user_signed_in? %>
         		<li><%= link_to "Active Participants", active_participants_path %></li>
         		<li><%= link_to "All Participants", participants_path %></li>
+        		<li><%= link_to "Mass Message", mass_message_participants_path %></li>
         		<li><%= link_to "Settings", edit_user_registration_path %></li>
                 <li class="divider"></li>
                 <li>

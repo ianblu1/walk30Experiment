@@ -1,0 +1,24 @@
+%h1 Mass Message Participants
+
+%form.form-horizontal.offset2{action:mass_message_participants_path,method:"get"}
+	.control-group
+		.controls
+			%textarea{name:"content",id:"content",placeholder:"message...",rows:2}
+	.control-group
+		%label.control-label{for:"timing"} Timing
+		.controls
+			%select{name:"timing",id:"timing"}
+				%option{value:"with_next_pending_message"} With Next Pending Message
+				%option{value:"next_noon_local"} At the next noon, local time
+				%option{value:"tomorrow_noon_local"} Tomorrow at noon, local time
+				%option{value:"in_15_minutes"} In 15 minutes
+	.control-group
+		%label.control-label{for:"participant_status"} Participant status
+		.controls
+			%select{name:"participant_status",id:"participant_status"}
+				%option{value:Participant::ACTIVE} Active
+				%option{value:Participant::PENDING} Pending
+				%option{value:Participant::TERMINATED} Terminated
+	.control-group
+		.controls
+			%button.btn{type:"submit",name:"submit",value:"schedule_message"} Submit
