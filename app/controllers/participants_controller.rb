@@ -54,7 +54,7 @@ class ParticipantsController < ApplicationController
   end	
   
   def mass_message
-    medium = Message::TEST
+    medium = Message::TEXT
     content = params[:content]
     status = params[:participant_status]
     timing = params[:timing]
