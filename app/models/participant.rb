@@ -206,6 +206,12 @@ class Participant < ActiveRecord::Base
   
   #Message handling
   
+  def deliverMessage(content,medium)
+    message = self.messages.build(content:content,medium:medium,status:Message::PENDING)
+    message.save
+    message.deliver
+  end
+  
   def receiveMessage(content,medium)
     message = self.messages.build(content:content,medium:medium,status:Message::RECEIVED)
     message.save
