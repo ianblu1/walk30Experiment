@@ -16,7 +16,7 @@
 #
 
 class Participant < ActiveRecord::Base
-  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week#, :time_zone
+  attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week, :time_zone
   has_many :messages, :dependent => :destroy
   has_many :project_messages, :dependent => :destroy  
   
