@@ -9,7 +9,7 @@ describe "Participant pages" do
 
     it { should have_selector 'title', text: '| Sign Up' }
       
-    let(:submit) { "Enroll Me!" }
+    let(:submit) { "Sign Me Up!" }
 
     describe "with invalid information" do
       it "should not create a participant" do
@@ -20,10 +20,13 @@ describe "Participant pages" do
     describe "with valid information" do
       before do
         fill_in "Email",        with: "participant@example.com"
-        fill_in "Phone Number",     with: "987-654-3210"
-        fill_in "Zip Code", with: "90210"
+        fill_in "Cellphone Number",     with: "650-704-8903"
+        choose("participant_morning_reminder_true")
+        fill_in "Zip Code/Area Code", with: "90210"
+        fill_in "Time Zone Abbreviation (Example: PST, EST)", with:"PST"
         fill_in "Age", with: 40
         choose("participant_is_male_false")
+        
       end
 
       it "should create a participant" do

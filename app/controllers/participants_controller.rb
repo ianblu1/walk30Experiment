@@ -7,8 +7,8 @@ class ParticipantsController < ApplicationController
   
   def create
     @participant = Participant.new(params[:participant])
-    if verify_recaptcha
-      flash.discard(:recaptcha_error)
+    #if verify_recaptcha
+      #flash.discard(:recaptcha_error)
       if @participant.save
         if @participant.activate
           redirect_to welcome_path
@@ -20,11 +20,11 @@ class ParticipantsController < ApplicationController
       else
         render 'new'
       end
-    else
-      @participant.valid?
-      flash[:recaptcha_error] = "Try again:\n Your captcha response didn't match. Are you a robot?"
-      render 'new'
-    end
+    #else
+      #@participant.valid?
+      #flash[:recaptcha_error] = "Try again:\n Your captcha response didn't match. Are you a robot?"
+      #render 'new'
+    #end
   end  
   
   def update
