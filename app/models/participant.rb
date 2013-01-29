@@ -17,8 +17,11 @@
 
 class Participant < ActiveRecord::Base
   attr_accessible :age, :email, :is_male, :phone, :zip_code, :status, :morning_reminder, :walked_last_week, :time_zone
+  attr_accessible :reminder_strategy
   has_many :messages, :dependent => :destroy
   has_many :project_messages, :dependent => :destroy  
+
+  default_scope order: 'participants.created_at DESC'
   
   ReceivedMessageHandlers = WalkReceivedAutoreply, ReceivedMessageAutoflag
   
@@ -30,7 +33,6 @@ class Participant < ActiveRecord::Base
   #message status codes
   MESSAGE_PENDING = 0
      
-  PROJECT_MESSAGE_CONTENT="Walk30!\nReply \"walk\" when you go for your walk."
   WELCOME_MESSAGE_CONTENT="Welcome to The Walk30 Project!\nWe'll send you a daily reminder to go for a walk. Reply \"quit\" to opt out..."
   DISCLAIMER_MESSAGE_CONTENT="Walk30: Message & data rates from your carrier may apply."
   
@@ -75,7 +77,6 @@ class Participant < ActiveRecord::Base
 #    ActiveSupport::TimeZone.find_by_zipcode(self.zip_code)
 #  end
                       
-  default_scope order: 'participants.created_at DESC'
   
   def self.withPhone(phone)
     return Participant.find_by_phone(Participant.formatPhone(phone))
@@ -84,19 +85,19 @@ class Participant < ActiveRecord::Base
   #Daily reminder stuff
   
       
-  def dailyReminderStrategy
-    IanReminderStrategy
+  def reminderStrategyClass
+    eval(self.reminder_strategy.camelize)
   end
   
   def setNextReminderMessage
     if not self.pendingReminderMessages?
-      m = self.dailyReminderStrategy.nextReminderMessage(self)
+      m = self.reminderStrategyClass.nextReminderMessage(self)
       m.save
     end
   end
   
   def pendingReminderMessages?
-    self.dailyReminderStrategy.pendingReminderMessages(self).length>0
+    self.reminderStrategyClass.pendingReminderMessages(self).length>0
   end
       
   def messagesUnflaggedOrChangedWithinNSeconds(n)

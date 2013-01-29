@@ -3,6 +3,7 @@
 		%th ID
 		%th STATUS
 		%th Days in STATUS
+		%th Reminder Strategy
 		%th EMAIL
 		%th PHONE
 		%th ZIP
@@ -16,6 +17,7 @@
 			%td= link_to p.id, p	
 			%td= p.statusString
 			%td= '%.2f' % p.days_in_status
+			%th= p.reminder_strategy
 			%td= p.email
 			%td= p.phone
 			%td= p.zip_code

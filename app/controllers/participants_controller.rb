@@ -7,6 +7,8 @@ class ParticipantsController < ApplicationController
   
   def create
     @participant = Participant.new(params[:participant])
+    #Randomly assign a reminder strategy
+    @participant.reminder_strategy = [IntervalConsistentStrategy,IntervalSampleStrategy].sample.name.underscore
     #if verify_recaptcha
       #flash.discard(:recaptcha_error)
       if @participant.save

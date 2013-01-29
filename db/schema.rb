@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121227071859) do
+ActiveRecord::Schema.define(:version => 20130129160836) do
 
   create_table "message_strategies", :force => true do |t|
     t.integer  "strategy_id"
@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(:version => 20121227071859) do
     t.integer  "age"
     t.string   "zip_code"
     t.boolean  "is_male"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.string   "phone"
     t.integer  "status"
     t.datetime "experiment_begun_at"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20121227071859) do
     t.integer  "walked_last_week",    :default => 0
     t.string   "type"
     t.string   "time_zone",           :default => "PST"
+    t.string   "reminder_strategy",   :default => "ian_reminder_strategy"
   end
 
   add_index "participants", ["email"], :name => "index_participants_on_email", :unique => true
