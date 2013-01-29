@@ -14,6 +14,7 @@ gem 'pg'
 gem 'cancan'
 gem 'tzip'
 
+
 group :development, :test do
   gem 'factory_girl_rails', '4.1.0'
   gem 'rspec-rails', '2.11.0'
@@ -21,6 +22,7 @@ end
 
 group :development do
   gem 'annotate', '2.5.0'
+  gem 'taps'
 end
 
 # Gems used only for assets and not required
