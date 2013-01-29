@@ -30,7 +30,7 @@ class Participant < ActiveRecord::Base
   #message status codes
   MESSAGE_PENDING = 0
      
-  PROJECT_MESSAGE_CONTENT="Walk30!\nReply \"yes\" if now is a good time for your daily reminder. Reply \"no\" if it isn't.\nReply \"walk\" when you go for your walk."
+  PROJECT_MESSAGE_CONTENT="Walk30!\nReply \"walk\" when you go for your walk."
   WELCOME_MESSAGE_CONTENT="Welcome to The Walk30 Project!\nWe'll send you a daily reminder to go for a walk. Reply \"quit\" to opt out..."
   DISCLAIMER_MESSAGE_CONTENT="Walk30: Message & data rates from your carrier may apply."
   

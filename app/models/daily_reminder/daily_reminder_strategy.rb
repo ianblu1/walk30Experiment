@@ -31,7 +31,7 @@ class DailyReminderStrategy
   end
   
   def self.nextReminderContent(participant)
-    "Walk30!\nReply \"yes\" if now is a good time for your daily reminder. Reply \"no\" if it isn't.\nReply \"walk\" when you go for your walk."
+    "Walk30!\nReply \"walk\" when you go for your walk."
   end
   
   def self.nextReminderMessage(participant)
