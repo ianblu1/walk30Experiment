@@ -10,8 +10,7 @@
 	=link_to "Autoflag Received", autoflag_messages_path(:type=>"DailyReminderMessage"), :method => :put
 	%p
 	All Active Participants:
-	=link_to "Schedule Next Reminder", setNextReminders_participants_path, :method => :put
-	
+	=link_to "Schedule Next Reminder", setNextReminders_participants_path, :method => :put	
 		
 %h1 Active Participants Only
 
@@ -20,6 +19,7 @@
 %table{:cellspacing => "5"}
 	=render "/participants/active_participant_table", :header=>true
 	-@participants.each do |participant|
-		-messages = participant.messagesUnflaggedOrChangedWithinNSeconds(16*3600).sort_by{|message| message.id}
+		-#messages = participant.messagesUnflaggedOrChangedWithinNSeconds(16*3600).sort_by{|message| message.id}
+		-messages = participant.messages.select {|m| m.secondsSinceLastUpdate < @message_window_in_days*24*60*60}
 		=render "/participants/active_participant_table", :participant=>participant, :messages=>messages
 	

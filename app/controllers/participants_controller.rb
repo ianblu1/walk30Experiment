@@ -97,8 +97,11 @@ class ParticipantsController < ApplicationController
     @count_pendingMessages=ProjectMessage.find_all_by_status(Message::PENDING).count
     @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
-    @messages_filter =
-    @Participant = Participant
+    if params[:message_window_in_days]
+      @message_window_in_days = params[:message_window_in_days].to_f
+    else
+      @message_window_in_days = 1.25
+    end
   end
   
   def show

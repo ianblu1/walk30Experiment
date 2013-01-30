@@ -210,14 +210,14 @@ class Message < ActiveRecord::Base
     if self.status == PENDING
       if medium == TEXT
         delivered = self.deliverTwilioMessage
-      elsif medium == EMAIL
-        delivered = self.deliverEmailMessage
       elsif medium == TEST
         delivered = self.deliverTestMessage
       end
-      self.sent_at = DateTime.now
-      self.save
-      self.participant.messageDelivered(self)
+      if delivered
+        self.sent_at = DateTime.now
+        self.save
+        self.participant.messageDelivered(self)
+      end
     elsif self.status == DELIVERED
       puts "Cannot deliver message. Message has already been delivered."
     elsif self.status == RECEIVED
@@ -244,25 +244,21 @@ class Message < ActiveRecord::Base
     
     @client = Twilio::REST::Client.new(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     
-    twilio_message = @client.account.sms.messages.create({:from => from, :to => to, :body =>body})
-    if twilio_message.status == "queued"
-      self.status = DELIVERED
-      self.save
-      puts "Twilio message delivered."
-      return true
-    else
+    begin 
+      twilio_message = @client.account.sms.messages.create({:from => from, :to => to, :body =>body})
+      if twilio_message.status == "queued"
+        self.status = DELIVERED
+        self.save
+        puts "Twilio message delivered."
+        return true
+      else 
+        raise
+      end
+    rescue 
       self.status = FAILED
       self.save
       puts "Twilio message failed"
       return false
     end
   end
-
-  def deliverEmailMessage
-    self.status = FAILED
-    self.save
-    puts "Email not yet enabled"
-    return false
-  end
-  
 end
