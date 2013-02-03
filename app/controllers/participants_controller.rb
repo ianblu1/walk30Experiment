@@ -94,8 +94,7 @@ class ParticipantsController < ApplicationController
   end
           
   def active
-    @count_pendingMessages=ProjectMessage.find_all_by_status(Message::PENDING).count
-    @participants = Participant.paginate  :page => params[:page], :per_page => 5, 
+    @participants = Participant.paginate  :page => params[:page], :per_page => 20, 
                                           :conditions => ['status = ?', Participant::ACTIVE]
     if params[:message_window_in_days]
       @message_window_in_days = params[:message_window_in_days].to_f

@@ -21,5 +21,6 @@
 	-@participants.each do |participant|
 		-#messages = participant.messagesUnflaggedOrChangedWithinNSeconds(16*3600).sort_by{|message| message.id}
 		-messages = participant.messages.select {|m| m.secondsSinceLastUpdate < @message_window_in_days*24*60*60}
+		-messages.sort! {|a,b|  (b.sent_at ? b.sent_at : b.scheduled_at) <=> (a.sent_at ? a.sent_at : a.scheduled_at)}
 		=render "/participants/active_participant_table", :participant=>participant, :messages=>messages
 	
