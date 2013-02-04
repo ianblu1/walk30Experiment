@@ -113,8 +113,11 @@ class Participant < ActiveRecord::Base
       self.save
       #Send the welcome message
       begin
-        self.deliverMessage(WELCOME_MESSAGE_CONTENT,Message::TEXT)
-        self.deliverMessage(DISCLAIMER_MESSAGE_CONTENT,Message::TEXT)
+        if self.deliverMessage(WELCOME_MESSAGE_CONTENT,Message::TEXT)
+          self.deliverMessage(DISCLAIMER_MESSAGE_CONTENT,Message::TEXT)
+        else
+          return false
+        end
       rescue
         return false
       end
