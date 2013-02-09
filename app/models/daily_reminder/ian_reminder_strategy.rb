@@ -14,17 +14,17 @@ class IanReminderStrategy < DailyReminderStrategy
     
   def self.nextReminderDateTime(participant)
     Time.zone = "Pacific Time (US & Canada)"
-    nextMessageDateTimeString = DateTime.tomorrow.to_s + " " + self.randomMessageTimeString(participant) + " " + participant.time_zone_long
+    nextMessageDateTimeString = DateTime.now().strftime("%Y-%m-%d") + " " + self.randomMessageTimeString(participant) + " " + participant.time_zone_long
     nextMessageDateTime = DateTime.strptime(nextMessageDateTimeString, '%Y-%m-%d %k:%M %Z')    
     previousReminders = self.deliveredReminderMessages(participant)
     if previousReminders.length > 0
       lastMessage = previousReminders.last
       if lastMessage.flagPositive?
         nextMessageDateTime = lastMessage.scheduled_at
-        while nextMessageDateTime < DateTime.now
-          nextMessageDateTime += 24*60*60
-        end
       end
+    end
+    while nextMessageDateTime < DateTime.now
+      nextMessageDateTime = nextMessageDateTime.advance(:days => 1)
     end
     return nextMessageDateTime
   end

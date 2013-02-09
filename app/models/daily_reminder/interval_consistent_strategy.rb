@@ -6,7 +6,7 @@ class IntervalConsistentStrategy < DailyReminderStrategy
       lastMessage = previousReminders.last
       nextMessageDateTime = lastMessage.scheduled_at
       while nextMessageDateTime < DateTime.now
-        nextMessageDateTime += 24*60*60
+        nextMessageDateTime = nextMessageDateTime.advance(:days => 1)        
       end
       nextMessageDateTime
     else
