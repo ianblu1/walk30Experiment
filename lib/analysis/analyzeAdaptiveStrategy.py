@@ -2,6 +2,7 @@ import csvIO as csvIO
 import datetime
 import numpy as np
 import datetime
+import pylab as pl
 
 
 #Python dictionaries do not naturally accept arrays of dynamic length as values,
@@ -37,14 +38,29 @@ if __name__=="__main__":
     print header
     
     percPositive=[]
+    day=[]
+    n=1
     for value in header:
         print value
         vals=np.array(results[value])
         meanVals=np.mean(vals)
         percPositive.append(meanVals)
+        day.append(n)
+        n+=1
         
     
     print percPositive
+    
+    pl.figure()
+    pl.plot(day, percPositive)
+    pl.xlabel("day in tenure")
+    pl.ylabel("% positive response")
+    pl.ylim(0,0.5)
+    pl.xlim(0,8)
+    pl.savefig('responseRate.png')
+    pl.show()
+    
+    
     
     
         
