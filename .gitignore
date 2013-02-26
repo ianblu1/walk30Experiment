@@ -15,6 +15,8 @@ doc/
 .project
 .DS_Store
 .idea
+.pydevproject
+*.csv
 
 #ignore database configuration file
 /config/database.yml
